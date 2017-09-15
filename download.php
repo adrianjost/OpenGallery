@@ -6,79 +6,91 @@
  * edited by Adrian Jost (2016) - https://hackedit.de
 */
 // Make sure the script can handle large folders/files
-ini_set('max_execution_time', 6000);
-ini_set('memory_limit','2048M');
-ignore_user_abort(true);
-
+//ini_set('max_execution_time', 300);
+//ini_set('memory_limit','1536M');
+//ignore_user_abort(true);
 
 $source = __DIR__."/".$_GET['a'];
-$destination = $_GET['a']."/".$_GET['a']."-files.zip";
+$destination = $_GET['a']."/".$_GET['a']."-files";
 
-if(filemtime($_GET['a']."/lastup.txt") > filemtime($destination)){
-	//echo "regenerate...";
-	// delete old zip
-	if (is_file($destination)){unlink($destination);}
-	// Start the zipping!
+
+if(		!file_exists($destination."-1.zip") 
+	|| 	(file_exists($_GET['a']."/lastup.txt") && (filemtime($_GET['a']."/lastup.txt") > filemtime($destination."-1.zip")))
+	|| 	isset($_GET['i'])
+	|| 	isset($_GET['n'])
+	){
 	zipData($source, $destination);
 }
-//updatelist($destination);
-
-$file_name = $_GET['a']."/".$_GET['a']."-files.zip";
-header('Pragma: public'); 	// required
-header('Expires: 0');		// no cache
-header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($file_name)).' GMT');
-header('Cache-Control: private',false);
-header('Content-Type: '.$mime);
-header('Content-Disposition: attachment; filename="'.basename($file_name).'"');
-header('Content-Transfer-Encoding: binary');
-header('Content-Length: '.filesize($file_name));	// provide file size
-header('Connection: close');
-readfile($file_name);		// push it out
-exit();
-
-//header("Location: ".$_GET['a']."/".$_GET['a']."-files.zip");
-//echo 'Finished. <script>window.close()</script>';
-
-function startsWith($haystack, $needle) {
-    // search backwards starting from haystack length characters from the end
-    return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== false;
-}
-
-function endsWith($haystack, $needle) {
-    // search forward starting from end minus needle length characters
-    return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== false);
+else{
+	downloadpage();
+	exit();
 }
 
 // Here the magic happens :)
 function zipData($source, $destination) {
-	if (extension_loaded('zip')) {
-		if (file_exists($source)) {
-			if(!file_exists(dirname($destination))){mkdir(dirname($destination), 0777, true);}	
-			$zip = new ZipArchive();
-			if ($zip->open($destination, ZIPARCHIVE::CREATE)) {
-				$source = realpath($source);
-				if (is_dir($source)) {
-					$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($source), RecursiveIteratorIterator::SELF_FIRST);
-					foreach ($files as $file) {
-						$file = realpath($file);
-						if (is_dir($file)) {
-							$zip->addEmptyDir(str_replace($source . '/', '', $file . '/'));
-						} else if (is_file($file) && (!strpos($file, ".zip") !== false)) {	// exclude zip files
-							$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
-						}
-					}
-				} 
-				else if (is_file($source) && (!strpos($file, ".zip") !== false)) { 			// exclude zip files
-					$zip->addFromString(basename($source), file_get_contents($source));
-				}
-			}
-			else{ echo "ERROR - can't open zip</br>"; }
-			return $zip->close();
-		}
-		else{ echo "ERROR - source does not exist</br>"; }
+	$sumsize = 0;
+	$itemnr = 0;
+	
+	if (isset($_GET['i'])){$index = $_GET['i'];} 
+	else {
+		//start new zip process --> delete all old files
+		$index = 1;
+		$files = glob($_GET['a']."/*.{zip}", GLOB_BRACE);
+		foreach ($files as $file) {unlink($file);}
 	}
-	else{ echo "ERROR - no zip extension found</br>"; }
-	return false;
+	
+	$zip = new ZipArchive;
+	if ($zip->open($destination."-".$index.".zip", ZIPARCHIVE::CREATE) === TRUE) {
+		$files = glob($_GET['a']."/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
+		foreach ($files as $file) {
+			if (isset($_GET['n']) && $itemnr < $_GET['n']){$itemnr = $itemnr +1;}
+			else{
+				if (($sumsize + filesize($file)) > 12e7){
+					$zip->close();
+					echo "<script type='text/javascript'>window.location = 'download.php?a=".$_GET['a']."&i=".($index + 1)."&n=".$itemnr."'</script>";
+					//header("Location: download.php?a=".$_GET['a']."&i=".($index + 1)."&n=".$itemnr);
+					exit();
+				}
+				$zip->addFile($file, basename($file));
+				$itemnr = $itemnr + 1;
+				$sumsize = $sumsize + filesize($file);
+			}
+		}
+		$zip->close();
+		downloadpage();
+		exit();
+	} else { //echo 'failed'; 
+	}
+}
+
+
+function downloadpage(){
+	echo "<style>
+	a{
+		font: 400 16px/20px 'Segoe UI', sans-serif;
+		-webkit-font-smoothing: antialiased;
+		padding: 5px;
+		display:block;
+		color: #2196F3;
+	}
+	</style>";
+	echo "<a href='index.php?a=".$_GET['a']."' style='font-weight: 700;'>< Zurück zum Album</a></br>";
+	
+	$files = glob($_GET['a']."/*.{zip}", GLOB_BRACE); // all zip files
+	
+	// Download all - 1 Click
+	echo "Click the following link to download all files at once.<br>(maybe your browser is going to block the pop-ups. Then you have to use the links at the bottom.)";
+	echo "<a href='javascript:download()'>click to download all</a><script>function download() {";
+	foreach ($files as $file) {
+		echo "window.open('http://".$_SERVER['HTTP_HOST']."/".$file."', '".basename($file)."');";
+	}
+	echo "}</script></br></br>";
+	
+	echo "Click on one of the following links to download the appropriate file:";
+	// Download just a part
+	foreach ($files as $file) {
+		echo "<a target='_blank' href='".$file."'>download ".basename($file)." </a>";
+	}
+
 }
 ?>

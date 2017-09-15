@@ -1,7 +1,7 @@
 <?php if($_GET['a']=="abifahrt2"){header("Location: index.php?a=abifahrt");exit();}?>
 <html><head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 <style>
 html,body,h1,h2,h3,h4,h5,p,a{margin:0;padding:0; font-family: "Segoe UI", Arial;}
 .body{position:relative; -webkit-text-size-adjust: 100%; line-height: initial; background: #000 url("https://source.unsplash.com/collection/242611") no-repeat center; background-size: cover;}
@@ -33,10 +33,10 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
     max-height: 169px;
     overflow: hidden;
 }
-.imgwrap.video{
-	max-height: initial;
+.imgwrap video{
+	max-height:169px;
+	max-height:300px;
 }
-.imgwrap video,
 .imgwrap img{
 	max-width: 100%;
 	height: auto;
@@ -72,6 +72,31 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 }
 .imgwrap:hover .filename{
 	display:block;
+}
+
+.imgwrap.full{
+	position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99999;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    max-width: 100%;
+    max-height: 100%;
+    background: rgba(0,0,0,.9);
+    margin: 0;
+}
+.imgwrap.full img{    
+	display: block;
+	vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	width:auto;
+	max-width: 95%;
+	max-height:95%;
 }
 
 svg{
@@ -130,7 +155,7 @@ function isimg($fname){
 $files = array_reverse (glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE));
 foreach ($files as $file) {
 ?>
-	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>">
+	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>" <?php if(isimg($file)){ ?> onclick="$(this).toggleClass('full');if($(this).hasClass('full')){var image = $('.imgwrap.full > img');image.attr('src', image.attr('data-original').replace('?r=300','?r=l'));}" <?php } ?>>
 		<?php if (isset($_GET['admin'])){ // Delete Button?>
 			<a class="delete" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ea4335" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
@@ -138,12 +163,16 @@ foreach ($files as $file) {
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></span>
 		<?php if(isimg($file)){?>
-			<a href="<?php echo $file; ?>?r=l">
-				<img data-original="<?php echo $file; ?>?r=300&q=80" class="lazy" width="300px" height="170px">
-				<noscript><img src="<?php echo $file; ?>?r=300&q=80"></noscript>
-			</a>
+			<!-- <a href="<?php echo $file; ?>?r=l"> -->
+				<img data-original="<?php echo $file; ?>?r=300" class="lazy" width="300px" height="170px">
+				<noscript><img src="<?php echo $file; ?>?r=300"></noscript>
+			<!-- </a> -->
 		<?php } else {?>
-			 <video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video>
+			<?php /* /<video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video> */ ?>
+			<video width="300px" height="170px" controls <?php // autobuffer onclick="load();play();" ?>>
+				<source src="<?php echo $file; ?>">
+				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
+			</video>
 			<noscript><video src="<?php echo $file; ?>" controls>Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video></noscript>
 		<?php } ?>
 	</div>
@@ -162,7 +191,7 @@ foreach ($files as $file) {
 <script src="jquery.lazyload.min.js"></script>
 <script type="text/javascript" charset="utf-8">
 $("img.lazy").show().lazyload({effect : "fadeIn"});
-$("video.lazy").show().each(function() {var sourceFile = $(this).attr("data-src");$(this).attr("src", sourceFile);$(this).load();})
+//$("video.lazy").show().each(function() {var sourceFile = $(this).attr("data-src");$(this).attr("src", sourceFile);$(this).load();})
 
 </script>
 </body></html>

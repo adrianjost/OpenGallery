@@ -3,21 +3,26 @@
 	Options +FollowSymlinks 
 	
 # HTTPS
-#	RewriteCond %{HTTPS} off
-#	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 AddCharset UTF-8 .html
 
 # Block Hotlinking
-#	RewriteCond %{HTTP_REFERER} !^$
-#	RewriteCond %{REQUEST_FILENAME} -f
-#	RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif|ico|css|js)$ [NC]
-#	RewriteCond %{HTTP_REFERER} !^https?://([^.]+\.)?hackedit\. [NC]
-#	RewriteRule \.(jpg|jpeg|png|gif|ico|css|js)$ - [F,NC,L]
+	RewriteCond %{HTTP_REFERER} !^$
+	RewriteCond %{REQUEST_FILENAME} -f
+	RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif|ico|css|js)$ [NC]
+	RewriteCond %{HTTP_REFERER} !^https?://([^.]+\.)?hackedit\. [NC]
+	RewriteRule \.(jpg|jpeg|png|gif|ico|css|js)$ - [F,NC,L]
 # End Block Hotlinking
 
 # Adaptive Images
-#	RewriteCond %{REQUEST_URI} !thumbs
+	RewriteCond %{QUERY_STRING} r=300
+	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/gallery%{REQUEST_URI}.300px -f
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/gallery%{REQUEST_URI}.300px [L]
+
+	RewriteCond %{QUERY_STRING} r=300
+	RewriteCond %{REQUEST_URI} !thumbs
 	RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
 # End Adaptive Images
 </IfModule>

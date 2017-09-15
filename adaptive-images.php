@@ -11,13 +11,13 @@
    Adaptive Images by Matt Wilcox is licensed under a Creative Commons Attribution 3.0 Unported License.
 
 /* CONFIG ----------------------------------------------------------------------------------------------------------- */
-ini_set('max_execution_time', 600);
+ini_set('max_execution_time', 6000);
 ini_set('memory_limit','1024M');
 ignore_user_abort(true);
 
 $resolutions   = array(1000, 750, 500, 300, 200, 150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = "gallery/thumbs"; // where to store the generated re-sized images. Specify from your document root!
-$jpg_quality   = 80; // the quality of any generated JPGs on a scale of 0 to 100
+$jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
 $watch_cache   = TRUE; // check that the adapted image isn't stale (ensures updated source images are re-cached)
 $browser_cache = 60*60*24*7; // How long the BROWSER cache should last (seconds, minutes, hours, days. 7days by default)
@@ -25,25 +25,23 @@ $browser_cache = 60*60*24*7; // How long the BROWSER cache should last (seconds,
 /* END CONFIG ----------------------------------------------------------------------------------------------------------
 ------------------------ Don't edit anything after this line unless you know what you're doing -------------------------
 --------------------------------------------------------------------------------------------------------------------- */
-
+function exception_error_handler($errno, $errstr, $errfile, $errline ) {
+}
+set_error_handler("exception_error_handler");
 /* get all of the required data from the HTTP request */
 $document_root  = $_SERVER['DOCUMENT_ROOT'];
-$requested_uri  = "/gallery".parse_url(urldecode(strtok($_SERVER["REQUEST_URI"],'?')), PHP_URL_PATH);
+//$requested_uri  = "/gallery".parse_url(urldecode(strtok($_SERVER["REQUEST_URI"],'?')), PHP_URL_PATH);
+$requested_uri  = "/gallery".parse_url(urldecode($_SERVER["REQUEST_URI"]), PHP_URL_PATH);
 $requested_file = basename($requested_uri);
 $source_file    = $document_root.$requested_uri;
 $resolution     = FALSE;
 
-
 // does the $cache_path directory exist already?
 if (!is_dir("$document_root/$cache_path")) { // no
-  if (!mkdir("$document_root/$cache_path", 0775, true)) { // so make it
-    if (!is_dir("$document_root/$cache_path")) { // check again to protect against race conditions
-      // uh-oh, failed to make that directory
-      sendErrorImage("Failed to create cache directory at: $document_root/$cache_path");
-    }
-  }
-}
-
+	if (!mkdir("$document_root/$cache_path", 0755, true)) { // so make it
+		if (!is_dir("$document_root/$cache_path")) { // check again to protect against race conditions
+			sendErrorImage("Failed to create cache directory at: $document_root/$cache_path"); // uh-oh, failed to make that directory
+}}}
 
 /* helper function: Send headers and returns an image. */
 function sendImage($filename, $browser_cache) {
@@ -54,13 +52,11 @@ function sendImage($filename, $browser_cache) {
 	}
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 	if (in_array($extension, array('png', 'gif', 'jpeg'))) {
-		header("Content-Type: image/".$extension);
+	header("Content-Type: image/".$extension);
 	} else {
-		header("Content-Type: image/jpeg");
+	header("Content-Type: image/jpeg");
 	}
 	header("Cache-Control: private, max-age=".$browser_cache);
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
-	header('Date: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+$browser_cache).' GMT');
 	header('Content-Length: '.filesize($filename));
 	readfile($filename);
@@ -74,7 +70,6 @@ function sendErrorImage($message) {
   $requested_uri  = parse_url(urldecode($_SERVER['REQUEST_URI']), PHP_URL_PATH);
   $requested_file = basename($requested_uri);
   $source_file    = $document_root.$requested_uri;
-
 
   $im            = ImageCreateTrueColor(800, 300);
   $text_color    = ImageColorAllocate($im, 233, 14, 91);
@@ -114,14 +109,16 @@ function refreshCache($source_file, $cache_file, $resolution) {
     if (filemtime($cache_file) >= filemtime($source_file)) {
       return $cache_file;
     }
-    unlink($cache_file);	// modified, clear it
+
+    // modified, clear it
+    unlink($cache_file);
   }
   return generateImage($source_file, $cache_file, $resolution);
 }
 
 /* generates the given cache file for the given source file with the given resolution */
 function generateImage($source_file, $cache_file, $resolution) {
-  global $sharpen, $jpg_quality;
+  global $sharpen, $jpg_quality, $browser_cache;
 
   $extension = strtolower(pathinfo($source_file, PATHINFO_EXTENSION));
 
@@ -160,9 +157,13 @@ function generateImage($source_file, $cache_file, $resolution) {
     $transparent = imagecolorallocatealpha($dst, 255, 255, 255, 127);
     imagefilledrectangle($dst, 0, 0, $new_width, $new_height, $transparent);
   }
-  
-  ImageCopyResampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $width, $height); // do the resize in memory
-  ImageDestroy($src);
+  try{
+	ImageCopyResampled($dst, $src, 0, 0, 0, 0, $new_width, $new_height, $width, $height); // do the resize in memory
+	ImageDestroy($src);
+  } catch(Exception $e){
+	  sendImage($source_file, $browser_cache);
+	  exit();
+  }
 
   // sharpen the image?
   // NOTE: requires PHP compiled with the bundled version of GD (see http://php.net/manual/en/function.imageconvolution.php)
@@ -180,7 +181,7 @@ function generateImage($source_file, $cache_file, $resolution) {
 
   // does the directory exist already?
   if (!is_dir($cache_dir)) { 
-    if (!mkdir($cache_dir, 0775, true)) {
+    if (!mkdir($cache_dir, 0755, true)) {
       // check again if it really doesn't exist to protect against race conditions
       if (!is_dir($cache_dir)) {
         // uh-oh, failed to make that directory
@@ -224,62 +225,39 @@ if (!file_exists($source_file)) {
 /* check that PHP has the GD library available to use for image re-sizing */
 if (!extension_loaded('gd')) { // it's not loaded
   if (!function_exists('dl') || !dl('gd.so')) { // and we can't load it either
-    trigger_error('You must enable the GD extension to make use of Adaptive Images', E_USER_WARNING); // no GD available, so deliver the image straight up
+    // no GD available, so deliver the image straight up
+    trigger_error('You must enable the GD extension to make use of Adaptive Images', E_USER_WARNING);
     sendImage($source_file, $browser_cache);
-}}
-
-$rjpg_quality=0;
-if(isset($_GET["q"])){
-	$rjpg_quality = $_GET["q"];
-	if (in_array($rjpg_quality, array("100","90","80","70","60","50"))){
-		$jpg_quality = $rjpg_quality;
-	}
+  }
 }
-	
+
+
 if(isset($_GET["r"])){
 	$rresolution = $_GET["r"];
-	
-	if (in_array($rresolution, $resolutions)){
-		$resolution = $rresolution;
-	}
-	else{
-		sendImage($source_file, $browser_cache);
-		exit();
-	}
-}
+	if (in_array($rresolution, $resolutions)){$resolution = $rresolution;}
+	else{sendImage($source_file, $browser_cache);exit();
+}}
 
+
+/* if the requested URL starts with a slash, remove the slash */
 if(substr($requested_uri, 0,1) == "/") {
   $requested_uri = substr($requested_uri, 1);
 }
 
 /* whew might the cache file be? */
-if ($rjpg_quality == $jpg_quality){	$newfile = "q".$jpg_quality."-".$requested_file.".".$resolution."px";
-}else{ 								$newfile = $requested_file.".".$resolution."px";}
-
+$newfile = $requested_file.".".$resolution."px";
 $fileurl = str_replace($requested_file,"", $requested_uri);
-
 $cache_file = $document_root."/$cache_path/$fileurl/".$newfile;
 
 /* Use the resolution value as a path variable and check to see if an image of the same name exists at that path */
 if (file_exists($cache_file)) { // it exists cached at that size
-	if ($watch_cache) { // if cache watching is enabled, compare cache and source modified dates to ensure the cache isn't stale
-		$cache_file = refreshCache($source_file, $cache_file, $resolution);
-	}
-  
-	// send 304-Header if image is cached
-	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-		if((strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) <= time()) && (filemtime($cache_file) >= filemtime($source_file))) {
-			header('HTTP/1.1 304 Not Modified');
-			header("Cache-Control: private, max-age=".$browser_cache);
-			exit();
-		}
-	}
-	sendImage($cache_file, $browser_cache);
-	exit();
+  if ($watch_cache) { // if cache watching is enabled, compare cache and source modified dates to ensure the cache isn't stale
+    $cache_file = refreshCache($source_file, $cache_file, $resolution);
+  }
+
+  sendImage($cache_file, $browser_cache);
 }
 
 /* It exists as a source file, and it doesn't exist cached - lets make one: */
 $file = generateImage($source_file, $cache_file, $resolution);
 sendImage($file, $browser_cache);
-exit();
-?>
