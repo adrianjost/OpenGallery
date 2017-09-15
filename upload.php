@@ -129,7 +129,7 @@ nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform
 <?php $album = $_GET['a']; ?>
 <nav id="navigation">
 	<div class="title">
-		<a href="/?a=<?php echo $album; ?>">
+		<a href="/?a=<?php echo $album; ?>" id="back">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><path fill="#fff" d="M990 500c0-270.6-219.4-490-490-490S10 229.4 10 500s219.4 490 490 490 490-219.4 490-490zM536.7 267l63.3 63.3-173.3 173.3 188.7 188.7-63 63-252-252L536.7 267z"/></svg>
 			Galerie<span id="albumname"> <?php echo $album; ?></span>
 		</a>
@@ -145,7 +145,7 @@ nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform
 				Feedback</a></li>
 			<li><a href="upload-old.php?a=<?php echo $album; ?>">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#fff" viewBox="0 0 24 24"><g><path d="M16.5 16c1.378 0 2.5-1.122 2.5-2.5 0-1.379-1.122-2.5-2.5-2.5s-2.5 1.121-2.5 2.5c0 1.378 1.122 2.5 2.5 2.5zM7.5 11c-1.378 0-2.5 1.121-2.5 2.5 0 1.378 1.122 2.5 2.5 2.5s2.5-1.122 2.5-2.5c0-1.379-1.122-2.5-2.5-2.5zM20.992 10c-1.954 0-3.933-1.393-3.933-4.5 0-.277.224-.5.5-.5s.5.223.5.5c0 2.58 1.519 3.5 2.941 3.5l.8.012c-.924-4.565-4.967-8.012-9.8-8.012-4.829 0-8.869 3.441-9.798 8h.798c1.422 0 2.941-.92 2.941-3.5 0-.277.224-.5.5-.5s.5.223.5.5c0 3.107-1.98 4.5-3.941 4.5h-.949c-.033.329-.051.662-.051 1v2.5c0 2.865 2.201 5.223 5 5.478v5.022h3v-5.5c0-.277.224-.5.5-.5s.5.223.5.5v5.5h2v-5.5c0-.277.224-.5.5-.5s.5.223.5.5v5.5h3v-5.022c2.799-.254 5-2.613 5-5.478v-2.5c0-.333-.018-.662-.05-.985l-.958-.015zm-13.492 7c-1.93 0-3.5-1.57-3.5-3.5 0-1.931 1.57-3.5 3.5-3.5s3.5 1.569 3.5 3.5c0 1.93-1.57 3.5-3.5 3.5zm5.01 0h-1.01c-.372 0-.613-.393-.447-.724l.5-1c.169-.34.725-.34.895 0l.46.919c.251.335.012.805-.398.805zm.49-3.5c0-1.931 1.57-3.5 3.5-3.5s3.5 1.569 3.5 3.5c0 1.93-1.57 3.5-3.5 3.5s-3.5-1.57-3.5-3.5z"/></g></svg>
-				altes Uploadformular</a></li>
+				alter Uploader</a></li>
 		</ul>
 	</div>
 </nav>
@@ -200,4 +200,5 @@ nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform
 	</noscript>
 </div>
 <?php // End-Upload ?>
+<p style="text-align:center;color:#555;padding:5px;font-size:.6rem;">&copy; Copyright <a href="https://adrianjost.hackedit.de" rel="nofollow" style="color:#000";>Adrian Jost</a></p>
 </body></html>
