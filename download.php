@@ -27,11 +27,11 @@ $destination = $album."/".$album."-files";
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
 <title>Gallery ~ <?php echo $album; ?></title>
 <meta name="theme-color" content="<?php echo $color[1]; ?>">
-<link rel="stylesheet" href="style.css?v=23" type="text/css" media="all">
+<link rel="stylesheet" href="style.css?v=24" type="text/css" media="all">
 <style>
 body:before,
-.main .bt
-{background-color: <?php echo $color[0]; ?>;}
+.main .bt{background-color: <?php echo $color[0]; ?>;}
+.main{ margin: 7.5rem auto 1rem;}
 a{color:<?php echo $color[0]; ?>;}
 a:hover{color:<?php echo $color[1]; ?>;}
 .main .bt:hover{ background-color: <?php echo $color[1]; ?>;}

@@ -24,7 +24,7 @@ $color = $colors[ array_rand($colors,1)];
 <title>Gallery ~ <?php echo $album; ?></title>
 <link href="dropzone.min.css" type="text/css" rel="stylesheet" />
 <meta name="theme-color" content="<?php echo $color[1]; ?>">
-<link rel="stylesheet" href="style.css?v=23" type="text/css" media="all">
+<link rel="stylesheet" href="style.css?v=24" type="text/css" media="all">
 <link href="dropzone.min.css" type="text/css" rel="stylesheet" />
 <style>
 body:before,

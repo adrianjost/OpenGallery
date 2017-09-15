@@ -49,11 +49,11 @@ $color = $colors[ array_rand($colors,1)];
 <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script defer src="jquery.lazyload.min.js?v3"></script>
 <meta name="theme-color" content="<?php echo $color[1]; ?>">
-<link rel="stylesheet" href="style.css?v=23" type="text/css" media="all">
+<link rel="stylesheet" href="style.css?v=24" type="text/css" media="all">
 <style>
 body:before{background-color: <?php echo $color[0]; ?>;}
 a{color:<?php echo $color[0]; ?>;}
-.main{max-width: 1000px;margin: 5rem auto 1rem;padding:.5rem 0;}
+.main{max-width: 1000px;padding:.5rem 0;}
 </style>
 </head><body id="body">
 
