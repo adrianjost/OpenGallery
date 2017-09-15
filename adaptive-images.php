@@ -16,7 +16,7 @@
 ignore_user_abort(true);
 
 $resolutions   = array(300, 150); // the resolution break-points to use (screen widths, in pixels)
-$cache_path    = "gallery/thumbs"; // where to store the generated re-sized images. Specify from your document root!
+$cache_path    = str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", __DIR__)."/thumbs"; // where to store the generated re-sized images. Specify from your document root!
 $jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
 $watch_cache   = TRUE; // check that the adapted image isn't stale (ensures updated source images are re-cached)
@@ -251,7 +251,7 @@ if(substr($requested_uri, 0,1) == "/") {
 
 /* whew might the cache file be? */
 $newfile = $requested_file.".".$resolution."px";
-$fileurl = str_replace($requested_file,"", $requested_uri);
+$fileurl = str_replace($requested_file,"", str_replace("gallery/","",$requested_uri));
 $cache_file = $document_root."/$cache_path/$fileurl/".$newfile;
 
 /* Use the resolution value as a path variable and check to see if an image of the same name exists at that path */

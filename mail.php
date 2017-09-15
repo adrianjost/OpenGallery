@@ -1,23 +1,6 @@
 <?php header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0"); ?>
 <?php 
-// mobile detection
-if (preg_match('@(iPod|iPhone|Android|Mobil|BlackBerry|Windows Phone|SymbianOS|Opera Mini|Nokia|SonyEricsson)@', $_SERVER['HTTP_USER_AGENT'])){$res = 150; $ismobile=true;}
-else{$res = 300;$ismobile=false;}
-
-// filesizeformat
-function formatsize($bytes){
-	if 	($bytes >= 1048576)		{$bytes = number_format($bytes / 1048576, 2) . ' MB';}
-	elseif 	($bytes >= 1024)		{$bytes = number_format($bytes / 1024, 2) . ' KB';}
-	elseif 	($bytes > 1)			{$bytes = $bytes . ' bytes';}
-	elseif 	($bytes == 1)			{$bytes = $bytes . ' byte';}
-	else							{$bytes = '0 bytes';}
-	return $bytes;
-}
-function isimg($fname){
-	$urlExt = pathinfo($fname, PATHINFO_EXTENSION);
-	if (in_array($urlExt, array("gif", "jpg", "jpeg", "png"))) {return True;}
-	else{ return False; }
-}
+require("inc/sqlite.php");
 $album = $_GET['a'];
 $colors = array(
 	array("#F44336", "#B71C1C"),
@@ -51,11 +34,10 @@ $color = $colors[ array_rand($colors,1)];
 <link href="inc/style.css?v=24" type="text/css" rel="stylesheet">
 <style>
 body:before{background-color: <?php echo $color[0]; ?>;}
-a{color:<?php echo $color[0]; ?>;}
-.main{max-width: 1000px;padding:.5rem 0;}
 button.submit{border: 3px solid <?php echo $color[0]; ?>; color:<?php echo $color[0]; ?>;}
 button.submit:after{background: <?php echo $color[0]; ?>;}
 .input input[type="email"]:focus{border-color: <?php echo $color[0]; ?>;}
+.mailOpt input:focus{border-bottom: 3px solid <?php echo $color[0]; ?>;}
 </style>
 </head><body id="body">
 
@@ -80,54 +62,23 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 	</div>
 </nav>
 <?php // End-Header ?>
-<?php // Backups ?>
-<div class="mail box">
-	<?php if(!isset($_GET["frommail"])){ ?>
-		<form action="inc/mail-handle.php?new&a=<?php echo $album; ?>" autocomplete="on" method="POST">
-			<div class="input">
-				<input type="text" name="name" hidden value="">
-				<label for="q1">Get notified on new uploads. Enter your Mail:</label>
-				<input type="email" id="q1" name="email" placeholder="youremail@example.com" required>
-			</div>
-			<button type="submit" class="submit">Submit</button>
-		</form>
-	<?php }else{
-		echo "<p style='display:block;padding:.5rem;font-size:1.2rem;'>";
-		if(		isset($_GET["newabo"])) {echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
-		elseif(	isset($_GET["updated"])){echo "We've updated your username. Thanks!";}
-		elseif(	isset($_GET["deleted"])){echo "We've deleted all information we had about you.";}
-		elseif(	isset($_GET["duplicate"])){echo "You are already an follower!";}
-		echo "</p>";
-	} ?>
-</div>
-<div class="main box">
-<h2 id="albumname"><?php echo $album; ?></h2>
-<?php 
-$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
-rsort($files);
-foreach ($files as $file) {
+<?php // Main 
+$id = $_GET["id"];
 ?>
-	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>" <?php if(isimg($file)){ ?> onclick="$(this).toggleClass('full');if($(this).hasClass('full')){var image = $('.imgwrap.full > img');image.attr('src', image.attr('data-original').replace('?r=<?php echo $res; ?>',''));}" <?php } ?>>
-		<?php if (isset($_GET['admin'])){ // Delete Button?>
-			<a class="delete" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ea4335" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
-			</a>
-		<?php } ?>
-		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></br><?php echo formatsize(filesize($file)); ?></span>
-		<?php if(isimg($file)){ // Image files?>
-				<img data-original="<?php echo $file; ?>?r=<?php echo $res; ?>" class="lazy" width="300px" height="170px">
-				<noscript><img src="<?php echo $file; ?>?r=<?php echo $res; ?>"></noscript>
-		<?php } else { // Video files?>
-			<?php /* /<video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video> */ ?>
-			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="loadvideo.jpg" onclick="var sourceFile = $(this).attr('data-src');$(this).attr('src', sourceFile);$(this).removeAttr('data-src');$(this).load();$(this).removeAttr('poster');" <?php } ?>>
-				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
-			</video>
-			<noscript><video src="<?php echo $file; ?>" controls>Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video></noscript>
-		<?php } ?>
-	</div>
-<?php } ?>
-
+<div class="main box">
+	<form class="mailOpt" action="inc/mail-handle.php?update&a=<?php echo $album; ?>" autocomplete="on" method="POST">
+		<input type="text" name="id" hidden style="display:none;" value="<?php echo $id; ?>">
+		<label for="name">Enter your Name so we can write more personal mails to you</label>
+		<input type="text" name="name" placeholder="Adrian Jost" value="<?php echo get_username($id);?>">
+		</br>
+		<button type="submit" class="submit">Update</button>
+	</form>
+	<form class="mailOpt" action="inc/mail-handle.php?delete&a=<?php echo $album; ?>" autocomplete="on" method="POST">
+		<label>You aren't happy? We can unsubscribe you from this mailing-list</label>
+		<input type="text" name="id" hidden style="display:none;" value="<?php echo $id; ?>">
+		<button type="submit" class="submit">Delete Me (<?php echo get_usermail($id);?>)</button>
+	</form>
 </div>
-<?php // End-Backups ?>
+<?php // End-Main ?>
 <p style="text-align:center;color:#555;padding:5px;font-size:.6rem;">&copy; Copyright <a href="https://adrianjost.hackedit.de" rel="nofollow" style="color:#000";>Adrian Jost</a></p>
 </body></html>
