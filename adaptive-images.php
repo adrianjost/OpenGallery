@@ -50,7 +50,7 @@ function sendImage($filename, $browser_cache) {
 		unlink($filename);
 		//$filename = $source_file;
 		//$filename = "sorry.jpg";
-		header('Location: https://gallery.hackedit.de/sorry.jpg');
+		header('Location: https://gallery.hackedit.de/inc/media/sorry.jpg');
 		exit();
 	}
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));

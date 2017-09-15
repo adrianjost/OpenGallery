@@ -2,7 +2,7 @@
 // Beispiel SQLite
 // Datenbankabfrage
 // Datenbankverbindung herstellen
-$dbPath = str_replace("/inc","/".$_GET["a"]."/sqlite3.db",__DIR__);
+$dbPath = str_replace("/inc","/".$album."/sqlite3.db",__DIR__);
 
 // Setup ###############################################################
 

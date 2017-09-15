@@ -1,6 +1,6 @@
 <?php 
-require("sqlite.php");
-$album = $_GET["a"];
+require("inc/functions.php");
+require("inc/sqlite.php");
 // ID | Name | E-Mail | status (0/1)
 
 function strip($data) { return htmlspecialchars(stripslashes(trim($data)));	}
@@ -12,7 +12,7 @@ if(isset($_GET['new']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 	if (!ismail($email)){exit();}
 	$id = create_user(strip($email));
 	if ($id=="ERROR"){header("Location: https://gallery.hackedit.de/?a=$album&frommail&duplicate");exit();}
-	include("mails/mail-subscribe.php");
+	include("inc/mails/mail-subscribe.php");
 	smail($email,"OpenGallery: Please Confirm Subscription",$text);
 	header("Location: https://gallery.hackedit.de/?a=$album&frommail&newabo");
 }

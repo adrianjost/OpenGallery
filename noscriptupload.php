@@ -1,5 +1,5 @@
 <?php 
-if(!isset($_GET['a'])){header("HTTP/1.1 403 Forbidden"); header("Location: upload.php"); exit();}
+require("inc/functions.php");
 
 //ini_set('max_execution_time', 6000);
 //ini_set('post_max_size', '100M');
@@ -7,7 +7,7 @@ if(!isset($_GET['a'])){header("HTTP/1.1 403 Forbidden"); header("Location: uploa
 
 $valid_formats = array("jpg", "jpeg", "png", "gif", "mp4", "webm", "ogg");
 $max_file_size = 1024*1024*100; //100 mb
-$path = __DIR__."/".$_GET['a']."/"; // Upload directory
+$path = __DIR__."/".$album."/"; // Upload directory
 $count = 0;
 
 if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST"){
@@ -26,10 +26,10 @@ if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST"){
 	}
 }
 
-$fp = fopen($_GET['a']."/lastup.txt", 'w');
+$fp = fopen($album."/lastup.txt", 'w');
 fwrite($fp, time());
 fclose($fp);
 
-header("Location: index.php?a=".$_GET['a']);
+header("Location: index.php?a=".$album);
 exit();
 ?>

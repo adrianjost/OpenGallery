@@ -1,6 +1,8 @@
 <?php
+require("inc/functions.php");
+
 $ds          = DIRECTORY_SEPARATOR;
-$storeFolder = $_GET['a'];
+$storeFolder = $album;
 $valid_formats = array("jpg", "jpeg", "png", "gif", "mp4", "webm", "ogg");
 $max_file_size = 1024*1024*100; //100 mb
 
@@ -17,7 +19,7 @@ if (!empty($_FILES)) {
 		
 		image_fix_orientation($targetFile);
 		
-		$fp = fopen($_GET['a']."/lastup.txt", 'w');
+		$fp = fopen($album."/lastup.txt", 'w');
 		fwrite($fp, time());
 		fclose($fp);
 	}

@@ -24,7 +24,7 @@ $text = '
 								<h2 style="font-size:22px;line-height:28px;margin:0 0 12px 0">
 									Please <span class="il">Confirm</span><span class="il">Subscription</span>
 								</h2>
-								<a href="https://gallery.hackedit.de/inc/mail-handle.php?subscribe='.$id.'&a='.$album.'" style="color:#ffffff!important;display:inline-block;font-weight:500;font-size:16px;line-height:42px;font-family:Helvetica,Arial,sans-serif;width:auto;white-space:nowrap;min-height:42px;margin:12px 5px 12px 0;padding:0 22px;text-decoration:none;text-align:center;border:0;border-radius:3px;vertical-align:top;background-color:#5d5d5d!important" target="_blank">
+								<a href="https://gallery.hackedit.de/mail-handle.php?subscribe='.$id.'&a='.$album.'" style="color:#ffffff!important;display:inline-block;font-weight:500;font-size:16px;line-height:42px;font-family:Helvetica,Arial,sans-serif;width:auto;white-space:nowrap;min-height:42px;margin:12px 5px 12px 0;padding:0 22px;text-decoration:none;text-align:center;border:0;border-radius:3px;vertical-align:top;background-color:#5d5d5d!important" target="_blank">
 									<span style="display:inline;font-family:Helvetica,Arial,sans-serif;text-decoration:none;font-weight:500;font-style:normal;font-size:16px;line-height:42px;border:none;background-color:#5d5d5d!important;color:#ffffff!important">Yes, <span class="il">subscribe</span> me to this list.</span>
 								</a>
 								<br>
