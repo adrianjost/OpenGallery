@@ -21,12 +21,34 @@ if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST"){
 				$ext = ".".pathinfo($name, PATHINFO_EXTENSION);
 				$name = str_replace($ext, strtolower($ext), $name);
 	            if(move_uploaded_file($_FILES["files"]["tmp_name"][$f], $path.time()."-".$name)){ 
+					image_fix_orientation($path.time()."-".$name);
 					plus_item();	// Update Database
 					plus_foldersize(filesize($path.time()."-".$name));
 				}
 	        }
 	    }
 	}
+}
+
+function image_fix_orientation($filename) {
+	$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+	if(!($ext=="jpg"||$ext=="jpeg")){return;}
+    $exif = exif_read_data($filename);
+    if (!empty($exif['Orientation'])) {
+        $image = imagecreatefromjpeg($filename);
+        switch ($exif['Orientation']) {
+            case 3:
+                $image = imagerotate($image, 180, 0);
+                break;
+            case 6:
+                $image = imagerotate($image, -90, 0);
+                break;
+            case 8:
+                $image = imagerotate($image, 90, 0);
+                break;
+        }
+        imagejpeg($image, $filename, 90);
+    }
 }
 
 /*

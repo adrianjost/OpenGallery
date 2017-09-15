@@ -26,7 +26,7 @@ if(isset($_POST["title"])){
 
 <html><head>
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
-<title>Update | OpenGallery</title>
+<title>Info | OpenGallery</title>
 <meta name="theme-color" content="<?php echo $color[1]; ?>">
 <meta name="robots" content="noindex, nofollow">
 <meta name="googlebot" content="noindex, nofollow">
@@ -81,7 +81,7 @@ if(isset($_POST["title"])){
 			<h2>Edit Gallery</h2>
 			<p style="text-align:left;">Enter a new title:</p>
 			<input id="title" name="title" type="text" class="fullinput" placeholder="<?php echo get_FolderName();?>">
-			<button name="submit" type="submit" class="submit fullinput">Submit</button>
+			<button name="submit" type="submit" class="submit fullinput">Update</button>
 		</form>
 		<h2>Gallery Info</h2>
 		<table id="galleryinfo">

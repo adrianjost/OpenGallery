@@ -6,6 +6,6 @@
 <meta name="googlebot" content="noindex, nofollow">
 <link rel="icon" type="image/vnd.microsoft.icon" href="inc/media/favicon.ico">
 <link rel="icon" type="image/png" href="inc/media/favicon.png">
-<?php // <link href="inc/css/style.min.css?v=36" type="text/css" rel="stylesheet"> ?>
+<?php // <link href="inc/css/style.min.css?v=311" type="text/css" rel="stylesheet"> ?>
 <?php /* <style><?php include("inc/css/style.min.css");?></style>  */?>
-<link href="inc/css/style.min.css?v=39" type="text/css" rel="stylesheet">
+<link href="inc/css/style.min.css?v=311" type="text/css" rel="stylesheet">

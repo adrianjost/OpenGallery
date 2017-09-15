@@ -73,15 +73,18 @@ foreach ($files as $file) {
 		
 
 		<?php if(isimg($file)){ // Image files ?>
-				<?php $tmpimg=$file."?r=".$res; 
-				if ($count < 10){
-				?>
-					<img data-original="<?php echo $tmpimg; ?>" src="<?php echo $tmpimg; ?>" 
-					class="lazy" width="300px" height="170px" tabindex="0">
-				<?php } else { // Video files?>
-					<img data-original="<?php echo $tmpimg; ?>" 
-					class="lazy" width="300px" height="170px" tabindex="0">
-				<?php } ?>
+            <a href="<?php echo $file; ?>" class="download" download>
+                <svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"></path><path d="M235.47 374.6c5.54 5.54 13.04 8.65 20.86 8.65s15.3-3.1 20.84-8.64l118.9-118.9c11.52-11.5 11.52-30.1 0-41.6-11.5-11.52-30.18-11.52-41.7 0l-68.57 68.5V29.48C285.8 13.2 272.6 0 256.35 0c-16.3 0-29.5 13.2-29.5 29.5v253.08l-68.54-68.56c-11.5-11.52-30.2-11.5-41.7 0-11.5 11.5-11.5 30.18 0 41.7l118.9 118.9z"></path></g></svg>
+            </a>
+            <?php 
+            $tmpimg=$file."?r=".$res; 
+            if ($count < 12){ ?>
+                <img data-original="<?php echo $tmpimg; ?>" src="<?php echo $tmpimg; ?>" 
+                class="lazy" width="300px" height="170px" tabindex="0">
+            <?php } else { // Video files?>
+                <img data-original="<?php echo $tmpimg; ?>" 
+                class="lazy" width="300px" height="170px" tabindex="0">
+            <?php } ?>
 		<?php } else { // Video files?>
 			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" tabindex="0" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="inc/media/loadvideo.jpg"<?php } ?>>
 				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
