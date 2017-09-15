@@ -11,8 +11,11 @@
    Adaptive Images by Matt Wilcox is licensed under a Creative Commons Attribution 3.0 Unported License.
 
 /* CONFIG ----------------------------------------------------------------------------------------------------------- */
+ini_set('max_execution_time', 600);
+ini_set('memory_limit','1024M');
+ignore_user_abort(true);
 
-$resolutions   = array(1600,1382, 992, 768, 480,240); // the resolution break-points to use (screen widths, in pixels)
+$resolutions   = array(1000, 750, 500, 300, 200, 150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = "gallery/thumbs"; // where to store the generated re-sized images. Specify from your document root!
 $jpg_quality   = 80; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
@@ -33,7 +36,7 @@ $resolution     = FALSE;
 
 // does the $cache_path directory exist already?
 if (!is_dir("$document_root/$cache_path")) { // no
-  if (!mkdir("$document_root/$cache_path", 0755, true)) { // so make it
+  if (!mkdir("$document_root/$cache_path", 0775, true)) { // so make it
     if (!is_dir("$document_root/$cache_path")) { // check again to protect against race conditions
       // uh-oh, failed to make that directory
       sendErrorImage("Failed to create cache directory at: $document_root/$cache_path");
@@ -41,21 +44,27 @@ if (!is_dir("$document_root/$cache_path")) { // no
   }
 }
 
+
 /* helper function: Send headers and returns an image. */
 function sendImage($filename, $browser_cache) {
-  $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-  if (in_array($extension, array('png', 'gif', 'jpeg'))) {
-    header("Content-Type: image/".$extension);
-  } else {
-    header("Content-Type: image/jpeg");
-  }
-  header("Cache-Control: private, max-age=".$browser_cache);
-  header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
-  header('Date: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
-  header('Expires: '.gmdate('D, d M Y H:i:s', time()+$browser_cache).' GMT');
-  header('Content-Length: '.filesize($filename));
-  readfile($filename);
-  exit();
+	global $source_file;
+	if (filesize($filename) <= 2000){
+		unlink($filename);
+		$filename = $source_file;
+	}
+	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+	if (in_array($extension, array('png', 'gif', 'jpeg'))) {
+		header("Content-Type: image/".$extension);
+	} else {
+		header("Content-Type: image/jpeg");
+	}
+	header("Cache-Control: private, max-age=".$browser_cache);
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
+	header('Date: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
+	header('Expires: '.gmdate('D, d M Y H:i:s', time()+$browser_cache).' GMT');
+	header('Content-Length: '.filesize($filename));
+	readfile($filename);
+	exit();
 }
 
 /* helper function: Create and send an image with an error message. */
@@ -105,9 +114,7 @@ function refreshCache($source_file, $cache_file, $resolution) {
     if (filemtime($cache_file) >= filemtime($source_file)) {
       return $cache_file;
     }
-
-    // modified, clear it
-    unlink($cache_file);
+    unlink($cache_file);	// modified, clear it
   }
   return generateImage($source_file, $cache_file, $resolution);
 }
@@ -173,7 +180,7 @@ function generateImage($source_file, $cache_file, $resolution) {
 
   // does the directory exist already?
   if (!is_dir($cache_dir)) { 
-    if (!mkdir($cache_dir, 0755, true)) {
+    if (!mkdir($cache_dir, 0775, true)) {
       // check again if it really doesn't exist to protect against race conditions
       if (!is_dir($cache_dir)) {
         // uh-oh, failed to make that directory
@@ -217,29 +224,22 @@ if (!file_exists($source_file)) {
 /* check that PHP has the GD library available to use for image re-sizing */
 if (!extension_loaded('gd')) { // it's not loaded
   if (!function_exists('dl') || !dl('gd.so')) { // and we can't load it either
-    // no GD available, so deliver the image straight up
-    trigger_error('You must enable the GD extension to make use of Adaptive Images', E_USER_WARNING);
+    trigger_error('You must enable the GD extension to make use of Adaptive Images', E_USER_WARNING); // no GD available, so deliver the image straight up
     sendImage($source_file, $browser_cache);
-  }
-}
+}}
 
+$rjpg_quality=0;
 if(isset($_GET["q"])){
 	$rjpg_quality = $_GET["q"];
-	if (in_array($rjpg_quality, array("100","90","80","75","70","60","50"))){
+	if (in_array($rjpg_quality, array("100","90","80","70","60","50"))){
 		$jpg_quality = $rjpg_quality;
 	}
-	else{
-		$rjpg_quality=0;
-	}
-}
-else{
-	$rjpg_quality=0;
 }
 	
 if(isset($_GET["r"])){
 	$rresolution = $_GET["r"];
 	
-	if (in_array($rresolution, array("150","300","500"))){
+	if (in_array($rresolution, $resolutions)){
 		$resolution = $rresolution;
 	}
 	else{
@@ -247,7 +247,6 @@ if(isset($_GET["r"])){
 		exit();
 	}
 }
-
 
 if(substr($requested_uri, 0,1) == "/") {
   $requested_uri = substr($requested_uri, 1);
@@ -276,8 +275,11 @@ if (file_exists($cache_file)) { // it exists cached at that size
 		}
 	}
 	sendImage($cache_file, $browser_cache);
+	exit();
 }
 
 /* It exists as a source file, and it doesn't exist cached - lets make one: */
 $file = generateImage($source_file, $cache_file, $resolution);
 sendImage($file, $browser_cache);
+exit();
+?>

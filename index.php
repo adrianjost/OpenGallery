@@ -1,3 +1,4 @@
+<?php if($_GET['a']=="abifahrt2"){header("Location: index.php?a=abifahrt");exit();}?>
 <html><head>
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,6 +29,12 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 	margin: 10px;
 	display: inline-block;
 	vertical-align: middle;
+	
+    max-height: 169px;
+    overflow: hidden;
+}
+.imgwrap.video{
+	max-height: initial;
 }
 .imgwrap video,
 .imgwrap img{
@@ -56,8 +63,8 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 .imgwrap .filename{
 	position: absolute;
 	display:none;
-	bottom: 10px;
-	left: 10px;
+	top: 3px;
+	left: 3px;
 	overflow: hidden;
 	color: #fff;
 	font-size:.6rem;
@@ -84,7 +91,8 @@ svg{
 	.header{position: relative;}
 	.title,	.header .button{float:none; text-align: center;}
 	.main{padding: 1rem; margin: 1rem auto 1rem}
-	.imgwrap{max-width: 45%; margin:5px 0; }
+	.imgwrap{max-width: 45%; margin:5px; }
+	.imgwrap.video{max-width:95%;}
 } 
 </style>
 </head><body id="body">
@@ -122,9 +130,9 @@ function isimg($fname){
 $files = array_reverse (glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE));
 foreach ($files as $file) {
 ?>
-	<div class="imgwrap">
+	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>">
 		<?php if (isset($_GET['admin'])){ // Delete Button?>
-			<a class="delete" target="_blank" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>" onclick="location.reload(true);">
+			<a class="delete" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ea4335" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
 			</a>
 		<?php } ?>
@@ -135,10 +143,8 @@ foreach ($files as $file) {
 				<noscript><img src="<?php echo $file; ?>?r=300&q=80"></noscript>
 			</a>
 		<?php } else {?>
-			 <video src="<?php echo $file; ?>" controls>
-				Ihr Browser kann dieses Video nicht wiedergeben.<br>
-				Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
-			</video>
+			 <video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video>
+			<noscript><video src="<?php echo $file; ?>" controls>Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video></noscript>
 		<?php } ?>
 	</div>
 <?php } ?>
@@ -155,8 +161,8 @@ foreach ($files as $file) {
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script src="jquery.lazyload.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-	$("img.lazy").show().lazyload({
-		effect : "fadeIn"
-    });
-  </script>
+$("img.lazy").show().lazyload({effect : "fadeIn"});
+$("video.lazy").show().each(function() {var sourceFile = $(this).attr("data-src");$(this).attr("src", sourceFile);$(this).load();})
+
+</script>
 </body></html>
