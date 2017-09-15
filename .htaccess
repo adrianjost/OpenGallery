@@ -3,42 +3,49 @@
 	Options +FollowSymlinks 
 	
 # Block Bots
-#	RewriteCond %{HTTP_USER_AGENT} ^Googlebot [OR,NC]
-#	RewriteCond %{HTTP_USER_AGENT} ^Bingbot [OR,NC]
-#	RewriteCond %{HTTP_USER_AGENT} ^(.*)bot$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)Crawl(.*)$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)bot(.*)$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)Google(.*)$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)Sogou(.*)$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)GTmetrix(.*)$ [OR,NC]
+#	RewriteCond %{HTTP_USER_AGENT} ^(.*)Baiduspider(.*)$ [OR,NC]
 #	RewriteCond %{HTTP_USER_AGENT} ^Slurp [NC]
 #	RewriteRule .* - [F]
 	
 # HTTPS
-#	RewriteCond %{HTTPS} off
-#	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+	RewriteCond %{HTTPS} off
+	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
 
 AddCharset UTF-8 .html
 
 # Block Hotlinking
-#	RewriteCond %{HTTP_REFERER} !^$
-#	RewriteCond %{REQUEST_FILENAME} -f
-#	RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif|ico|css|js)$ [NC]
-#	RewriteCond %{HTTP_REFERER} !^https?://([^.]+\.)?hackedit\. [NC]
-#	RewriteRule \.(jpg|jpeg|png|gif|ico|css|js)$ - [F,NC,L]
+	RewriteCond %{HTTP_REFERER} !^$
+	RewriteCond %{REQUEST_FILENAME} -f
+	RewriteCond %{REQUEST_FILENAME} \.(jpg|jpeg|png|gif|ico|css|js)$ [NC]
+	RewriteCond %{HTTP_REFERER} !^https?://([^.]+\.)?hackedit\. [NC]
+	RewriteRule \.(jpg|jpeg|png|gif|ico|css|js)$ - [F,NC,L]
 # End Block Hotlinking
 
 # Adaptive Images
-#	RewriteCond %{QUERY_STRING} r=150
-#	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs%{REQUEST_URI}.150px -f
-#	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs%{REQUEST_URI}.150px [NC,L]
-#	
-#	RewriteCond %{QUERY_STRING} r=300
-#	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs%{REQUEST_URI}.300px -f
-#	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs%{REQUEST_URI}.300px [NC,L]
-#
-#	RewriteCond %{QUERY_STRING} r=1000
-#	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs%{REQUEST_URI}.1000px -f
-#	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs%{REQUEST_URI}.1000px [NC,L]
-#
-#	RewriteCond %{QUERY_STRING} !=""
-#	RewriteCond %{REQUEST_URI} !thumbs
-#	RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
+	RewriteCond %{QUERY_STRING} r=150
+	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/%{REQUEST_URI}.150px -f
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/%{REQUEST_URI}.150px [NC,L]
+	
+	RewriteCond %{QUERY_STRING} r=300
+	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/%{REQUEST_URI}.300px -f
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/%{REQUEST_URI}.300px [NC,L]	
+	
+	RewriteCond %{QUERY_STRING} r=500
+	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/%{REQUEST_URI}.500px -f
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/%{REQUEST_URI}.500px [NC,L]
+
+	RewriteCond %{QUERY_STRING} r=1000
+	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/%{REQUEST_URI}.1000px -f
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/%{REQUEST_URI}.1000px [NC,L]
+
+	RewriteCond %{QUERY_STRING} !=""
+	RewriteCond %{REQUEST_URI} !thumbs
+	RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php
 # End Adaptive Images
 </IfModule>
 

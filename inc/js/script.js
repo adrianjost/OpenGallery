@@ -1,71 +1,83 @@
-var full = false;  
-// Toggle Fullscreen of Images
-$(".imgwrap").click(function(){
-	
-	$(this).toggleClass('full');
-	$(".gallerynav").toggleClass('hidden');
-	full = !full;
-	loadFull();
-});
+var full = false;   
+var fullE = undefined;
+var gnav = document.getElementById("gallerynav");
+var gpre = document.getElementById("galleryprev");
+var gnex = document.getElementById("gallerynext");
 
-// Fullscreen Navigation
-$(".galleryprev").click(prevSlide);
-$(".gallerynext").click(nextSlide);
+var x = document.getElementsByClassName("imgwrap");
+var i;
+for (i = 0; i < x.length; i++) {
+    x[i].onclick = function(e){
+		fullE = this;
+		this.classList.toggle("full");
+		
+		gnav.classList.toggle("hidden");
+		full = !full;
+		if(full){loadFull();}
+	}
+}
 
+gpre.onclick = prevSlide;
+gnex.onclick = nextSlide;
 
 function prevSlide(){
-	stopvideo();
-	if($(".imgwrap.full").prev().prev().length != 0){
-		$(".imgwrap.full").toggleClass('close');
-		$(".imgwrap.close").prev().toggleClass('full');
-		$(".imgwrap.close").toggleClass('close').toggleClass('full');
+	var pre = fullE.previousElementSibling;
+	if(pre.id != "albumname"){
+		stopvideo();
+		fullE.classList.toggle("full");
+		pre.classList.toggle("full");
+		fullE = pre;
 		loadFull();
 	}else{ closeFull(); }
 }
 function nextSlide(){
-	stopvideo();
-	if($(".imgwrap.full").next().length != 0){	
-		$(".imgwrap.full").toggleClass('close');
-		$(".imgwrap.close").next().toggleClass('full');
-		$(".imgwrap.close").toggleClass('close').toggleClass('full');
+	var nex = fullE.nextElementSibling;
+	if(nex != undefined){
+		stopvideo();
+		fullE.classList.toggle("full");
+		nex.classList.toggle("full");
+		fullE = nex;
 		loadFull();
 	}else{ closeFull(); }
 }
 function closeFull(){
-	$(".gallerynav").toggleClass('hidden');
-	$(".imgwrap.full").toggleClass('full');
 	stopvideo();
+	gnav.classList.toggle("hidden");
+	fullE.classList.toggle("full");
 	full = !full;
+	fullE = undefined;
 }
 
-
-function isimg()	{return ($('.imgwrap.image.full').length != 0);}
-function isvideo()	{return ($('.imgwrap.video.full').length != 0);}
-function stopvideo(){if(isvideo()){var video = $('.imgwrap.video.full > .lazyvid').get(0);video.pause();}}
-function playvideo(){if(isvideo()){var video = $('.imgwrap.video.full > .lazyvid').get(0);video.play();}}
+//function isimg()	{return (document.getElementsByClassName('imgwrap image full')[0] != undefined);}
+//function isvideo()	{return (document.getElementsByClassName('imgwrap video full')[0] != undefined);}
+function isimg()	{return (fullE.className.indexOf("image") != -1);}
+function isvideo()	{return (fullE.className.indexOf("video") != -1);;}
+function stopvideo(){if(isvideo()){var video = fullE.getElementsByTagName('video')[0];video.pause();}}
+//function playvideo(){if(isvideo()){var video = document.getElementsByClassName('imgwrap video full')[0].getElementsByTagName('video')[0];video.play();}}
 function togglevideo(){	if(isvideo()){
-		var video = $('.imgwrap.video.full > .lazyvid').get(0);
+		var video = fullE.getElementsByTagName('video')[0];
 		if (video.paused == true){	video.play();
 		}else{						video.pause();}
 }}
 
 function loadFull(){
 	if(isimg()){
-		if(($('.imgwrap.image.full > img').attr('src').indexOf("data:image/gif;") !== -1)
-			|| ($('.imgwrap.image.full > img').attr('src').indexOf("?r=1000") == -1)){
-			var image = $('.imgwrap.image.full > img');
-			image.attr('src', image.attr('data-original').replace('?r=150','?r=1000').replace('?r=300','?r=1000'));
+		var image = fullE.getElementsByTagName('img')[0];
+		if((	image.getAttribute('src') == undefined)
+			|| (image.getAttribute('src').indexOf(maxsize) == -1)){
+			image.setAttribute('src', image.getAttribute('data-original').replace(minsize,maxsize));
+			image.className += ' loaded';
 		}
 	}
 	else if (isvideo()){
-		if($('.imgwrap.video.full > .lazyvid').attr('src') !== $('.imgwrap.video.full > .lazyvid').attr('data-src')){
-			var video = $('.imgwrap.video.full > .lazyvid');
-			video.attr('src', video.attr('data-src'));
-			video.removeAttr('poster');
-			video.get(0).load();
-			video.get(0).play();
+		var video = fullE.getElementsByTagName('video')[0];
+		if(video.getAttribute('src') !== video.getAttribute('data-src')){
+			video.setAttribute('src', video.getAttribute('data-src'));
+			video.removeAttribute('poster');
+			video.load();
+			video.play();
 		}else{
-			playvideo();
+			video.play();
 		}
 	}
 }

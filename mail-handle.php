@@ -1,4 +1,5 @@
 <?php 
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 require("inc/functions.php");
 require("inc/sqlite.php");
 // ID | Name | E-Mail | status (0/1)
@@ -23,13 +24,13 @@ elseif(isset($_GET['subscribe'])){
 	$id = $_GET["subscribe"];	
 	enable_user($id);
 	$_SESSION["mailstatus"] = "subscribed";
-	header("Location: mail.php");
+	header("Location: mail.php?id=".$id);
 }
 elseif(isset($_GET['update']) && $_SERVER['REQUEST_METHOD'] == 'POST'){	
 	// update users name
 	update_username($_POST["id"], strip( $_POST["name"]	));
 	$_SESSION["mailstatus"] = "updated";
-	header("Location: index.php");
+	header("Location: mail.php?id=".$_POST["id"]);
 }
 elseif(isset($_GET['delete']) && isset($_POST["id"])){	
 	// delete users

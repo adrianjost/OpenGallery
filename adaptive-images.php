@@ -15,7 +15,7 @@
 //ini_set('memory_limit','1024M');
 ignore_user_abort(true);
 
-$resolutions   = array(1000,300, 150); // the resolution break-points to use (screen widths, in pixels)
+$resolutions   = array(1000,500,300, 150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", __DIR__)."/thumbs"; // where to store the generated re-sized images. Specify from your document root!
 $jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
@@ -25,6 +25,13 @@ $browser_cache = 60*60*24*7; // How long the BROWSER cache should last (seconds,
 /* END CONFIG ----------------------------------------------------------------------------------------------------------
 ------------------------ Don't edit anything after this line unless you know what you're doing -------------------------
 --------------------------------------------------------------------------------------------------------------------- */
+if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+	if(strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']) <= time()) {
+		header('HTTP/1.1 304 Not Modified');
+		header("Cache-Control: public, max-age".$browser_cache);
+		exit();
+}}
+
 function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 }
 set_error_handler("exception_error_handler");
@@ -42,15 +49,17 @@ if (!is_dir("$document_root/$cache_path")) { // no
 		if (!is_dir("$document_root/$cache_path")) { // check again to protect against race conditions
 			sendErrorImage("Failed to create cache directory at: $document_root/$cache_path"); // uh-oh, failed to make that directory
 }}}
-
+		
 /* helper function: Send headers and returns an image. */
 function sendImage($filename, $browser_cache) {
-	global $source_file;
-	if (filesize($filename) <= 2000){
+	global $source_file, $requested_uri;
+	if (filesize($filename) <= 5000){
 		unlink($filename);
 		//$filename = $source_file;
 		//$filename = "sorry.jpg";
-		header('Location: https://gallery.hackedit.de/inc/media/sorry.jpg');
+		$url = strtok($_SERVER["REQUEST_URI"],'?');
+		header("HTTP/1.1 307 Temporary Redirect"); 
+		header('Location: https://gallery.hackedit.de'.$url);
 		exit();
 	}
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));

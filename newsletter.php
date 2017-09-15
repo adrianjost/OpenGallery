@@ -1,4 +1,6 @@
 <?php 
+ignore_user_abort(true);
+
 $album="";
 require("inc/sqlite.php");
 include("inc/mails/mail-newitems.php");
@@ -8,11 +10,11 @@ foreach ($folders as $folder) {
 	$album = $folder;
 	$dbPath = __DIR__."/".$album."/sqlite3.db";
 	updatefolder();
-	echo $album." - ".get_FolderName()." (".get_countitems()."|".get_lastNewsItems().")</br>";
-	echo ((get_lastNewsTime()<get_lastUp()) ? "NEW ITEMS" : "NO NEW ITEM") ."</br>";
-	echo get_countitems()-get_lastNewsItems()." NEW ITEMS</br>";
+	echo "</br>".$album." - ".get_FolderName()." (".get_countitems()."|".get_lastNewsItems().")</br>";
+	echo " > ".((get_lastNewsTime()<get_lastUp()) ? ("+".get_countitems()-get_lastNewsItems()) : "/") ."</br>";
 	
-	if(get_lastNewsTime()<get_lastUp()){
+	
+	if(get_lastNewsTime()<get_lastUp()){		
 		$fname = get_FolderName();												// Gallery-name
 		$newitems = get_countitems()-get_lastNewsItems();						// Number of new Items
 		if ($newitems == 0){$newitems = "some";}
@@ -28,10 +30,9 @@ foreach ($folders as $folder) {
 			smail($email,"OpenGallery ($fname): New Files",newitemmail($newitems,$fname,$link,$uid,$uname));
 		}
 		echo "</br></br>";
-		set_lastNewsItems();
-		set_lastNewsTime();
-		
 	}
+	set_lastNewsItems();
+	set_lastNewsTime();
 }
 
 
