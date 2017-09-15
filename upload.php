@@ -93,7 +93,7 @@ ul,li{list-style: none;padding-left: .5rem; font-size: 1rem; margin:0;}
 	<form method="post" action="fileupload.php?a=<?php echo $album; ?>" enctype="multipart/form-data">
 		<div class="fileUpload">
 			<span>Dateien auswählen</span>  
-			<input type="file" id="filesToUpload" name="files[]" multiple="multiple" onchange="makeFileList();" accept="image/*" />
+			<input type="file" id="filesToUpload" name="files[]" multiple="multiple" onchange="makeFileList();" accept="image/*,video/*" />
 		</div>
 		
 		

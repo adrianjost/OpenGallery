@@ -29,6 +29,7 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 	display: inline-block;
 	vertical-align: middle;
 }
+.imgwrap video,
 .imgwrap img{
 	max-width: 100%;
 	height: auto;
@@ -38,6 +39,7 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 	display:none;
 	top: 10px;
 	right: 10px;
+	z-index: 9999;
 }
 .imgwrap .delete svg{
 	width: 0; 
@@ -88,14 +90,20 @@ svg{
 </head><body id="body">
 
 <?php // Header ?>
-<?php $album = $_GET['a']; ?>
+<?php $album = $_GET['a']; 
+function isimg($fname){
+	$urlExt = pathinfo($fname, PATHINFO_EXTENSION);
+	if (in_array($urlExt, array("gif", "jpg", "jpeg", "png"))) {return True;}
+	else{ return False; }
+}
+?>
 <div class="header">
 	<div class="title">
 		<h1 class="headline">Gallery<span id="albumname">~<?php echo $album; ?></span></h1>
 	</div>
 	<div class="button"><a href="upload.php?a=<?php echo $album; ?>">
 		<svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"></path><path d="M235.47 8.65C241.01 3.11 248.51 0 256.33 0s15.3 3.1 20.84 8.64l118.9 118.9c11.52 11.5 11.52 30.1 0 41.6-11.5 11.52-30.18 11.52-41.7 0l-68.57-68.5v253.13c0 16.28-13.2 29.48-29.45 29.48-16.3 0-29.5-13.2-29.5-29.5V100.67l-68.54 68.56c-11.5 11.52-30.2 11.5-41.7 0-11.5-11.5-11.5-30.18 0-41.7l118.9-118.9z"></path></g></svg>
-		Add photo</a></div>
+		Add File</a></div>
 	<div class="button"><a target="_blank" href="download.php?a=<?php echo $album; ?>">
 		<svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"/><path d="M235.47 374.6c5.54 5.54 13.04 8.65 20.86 8.65s15.3-3.1 20.84-8.64l118.9-118.9c11.52-11.5 11.52-30.1 0-41.6-11.5-11.52-30.18-11.52-41.7 0l-68.57 68.5V29.48C285.8 13.2 272.6 0 256.35 0c-16.3 0-29.5 13.2-29.5 29.5v253.08l-68.54-68.56c-11.5-11.52-30.2-11.5-41.7 0-11.5 11.5-11.5 30.18 0 41.7l118.9 118.9z"/></g></svg>
 		Download</a></div>
@@ -108,9 +116,11 @@ svg{
 <?php 
 //foreach (glob("$album/*.{jpg,kpeg,png,gif}", GLOB_BRACE) as $file) {
 	
-$myarray = glob("$album/*.{jpg,kpeg,png,gif}", GLOB_BRACE);
-usort($myarray, create_function('$b, $a', 'return filemtime($a) - filemtime($b);'));
-foreach ($myarray as $file) {
+//$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE);
+//usort($files, create_function('$b, $a', 'return filemtime($a) - filemtime($b);'));
+
+$files = array_reverse (glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE));
+foreach ($files as $file) {
 ?>
 	<div class="imgwrap">
 		<?php if (isset($_GET['admin'])){ // Delete Button?>
@@ -119,10 +129,17 @@ foreach ($myarray as $file) {
 			</a>
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></span>
-		<a href="<?php echo $file; ?>?r=l">
-			<img data-original="<?php echo $file; ?>?r=300&q=80" class="lazy" width="300px" height="170px">
-			<noscript><img src="<?php echo $file; ?>?r=300&q=80"></noscript>
-		</a>
+		<?php if(isimg($file)){?>
+			<a href="<?php echo $file; ?>?r=l">
+				<img data-original="<?php echo $file; ?>?r=300&q=80" class="lazy" width="300px" height="170px">
+				<noscript><img src="<?php echo $file; ?>?r=300&q=80"></noscript>
+			</a>
+		<?php } else {?>
+			 <video src="<?php echo $file; ?>" controls>
+				Ihr Browser kann dieses Video nicht wiedergeben.<br>
+				Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
+			</video>
+		<?php } ?>
 	</div>
 <?php } ?>
 
