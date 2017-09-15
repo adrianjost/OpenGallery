@@ -3,8 +3,6 @@ if(!isset($_GET['a'])){header("HTTP/1.1 403 Forbidden"); header("Location: uploa
 
 //ini_set('max_execution_time', 6000);
 //ini_set('post_max_size', '100M');
-ini_set('upload_max_filesize', '100M');
-ini_set('upload_max_filesize', '100M');
 //ignore_user_abort(true);
 
 $valid_formats = array("jpg", "jpeg", "png", "gif", "mp4", "webm", "ogg");
