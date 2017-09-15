@@ -5,12 +5,12 @@ require("inc/sqlite.php");
 // ID | Name | E-Mail | status (0/1)
 
 function strip($data) { return htmlspecialchars(stripslashes(trim($data)));	}
-function ismail($data){return(strpos($data, '@') !== false) ? true:false;}
+function ismail($data){return filter_var($data, FILTER_VALIDATE_EMAIL);}
 function isvalid($data){return ($data=="") ? false:true;}
 if(isset($_GET['new']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 	//create new user
 	$email = $_POST["email"];
-	if (!ismail($email)){exit();}
+	if (!ismail($email)){$_SESSION["mailstatus"] = "invalidmail";header("Location: index.php");exit();}
 	$id = create_user(strip($email));
 	if ($id=="ERROR"){
 		$_SESSION["mailstatus"] = "duplicate";

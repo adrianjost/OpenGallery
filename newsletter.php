@@ -10,9 +10,9 @@ foreach ($folders as $folder) {
 	$album = $folder;
 	$dbPath = __DIR__."/".$album."/sqlite3.db";
 	updatefolder();
-	echo "</br>".$album." - ".get_FolderName()." (".get_countitems()."|".get_lastNewsItems().")</br>";
-	echo " > ".((get_lastNewsTime()<get_lastUp()) ? ("+".get_countitems()-get_lastNewsItems()) : "/") ."</br>";
 	
+	echo "</br>".$album." - ".get_FolderName()." (".get_countitems()."|".get_lastNewsItems().")</br>";
+	echo "⇒ ".((get_lastNewsTime()<get_lastUp()) ? ("+".get_countitems()-get_lastNewsItems()) : "0") ." new</br>";
 	
 	if(get_lastNewsTime()<get_lastUp()){		
 		$fname = get_FolderName();												// Gallery-name
@@ -27,7 +27,7 @@ foreach ($folders as $folder) {
 			$uname = get_username($uid);
 			$email = get_usermail($uid);
 			echo "\t".$fname.": ".$email."(".$uname.")</br>";
-			smail($email,"OpenGallery ($fname): New Files",newitemmail($newitems,$fname,$link,$uid,$uname));
+			smail($email,"OpenGallery ($fname): New Files (".$newitems.")",newitemmail($newitems,$fname,$link,$uid,$uname));
 		}
 		echo "</br></br>";
 	}

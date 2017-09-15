@@ -53,7 +53,7 @@ if (!is_dir("$document_root/$cache_path")) { // no
 /* helper function: Send headers and returns an image. */
 function sendImage($filename, $browser_cache) {
 	global $source_file, $requested_uri;
-	if (filesize($filename) <= 5000){
+	if (filesize($filename) <= 2000){
 		unlink($filename);
 		//$filename = $source_file;
 		//$filename = "sorry.jpg";

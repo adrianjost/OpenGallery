@@ -17,11 +17,10 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 <?php
  //<script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
  //<script defer src="inc/jquery.lazyload.min.js?v3"></script> ?>
- <script>var minsize="?r=<?php echo ($ismobile)?"150":"300" ?>",maxsize="?r=<?php echo ($ismobile)?"500":"1000"?>"; <?php if (isset($_GET['admin'])){?>
-function loadEXT(a,b){var c=new XMLHttpRequest;c.open("GET",a,!0),c.onreadystatechange=function(){4==c.readyState&&"200"==c.status?b(c.responseText):4==c.readyState&&b("noresponse")},c.send(null)}
-function dph(e,n){
-	loadEXT("https://gallery.hackedit.de/delete.php?a=<?php echo $album; ?>&file="+n,function(){});
-	e.parentNode.removeChild(e)}
+<script>var minsize="?r=<?php echo ($ismobile)?"150":"300" ?>",maxsize="?r=<?php echo ($ismobile)?"500":"1000"?>"; 
+<?php if (isset($_GET['a'])){?>if("undefined"!=typeof Storage)localStorage.setItem("aid","<?php echo $_GET['a']?>"),localStorage.setItem("aname","<?php echo get_FolderName(); ?>");else{var o=new Date;o.setTime(o.getTime()+6048e5),document.cookie="aid=<?php echo $_GET['a'];?>; expires="+o.toUTCString()+"; path=/",document.cookie="aname=<?php echo get_FolderName();?>; expires="+o.toUTCString()+"; path=/"}<?php } ?>
+<?php if (isset($_GET['admin'])){?>
+function loadEXT(a,b){var c=new XMLHttpRequest;c.open("GET",a,!0),c.onreadystatechange=function(){4==c.readyState&&"200"==c.status?b(c.responseText):4==c.readyState&&b("noresponse")},c.send(null)}function dph(a,b){confirm("'Are you sure you want to delete this item?")&&(loadEXT("https://gallery.hackedit.de/delete.php?a=<?php echo $album; ?>&file="+b,function(){}),a.parentNode.removeChild(a))}
 <?php } ?></script>
 <script defer src="inc/js/script.min.js?v6"></script>
 </head><body id="body">
@@ -48,6 +47,7 @@ function dph(e,n){
 	<?php }else{
 		echo "<p style='display:block;padding:.5rem;font-size:1.2rem;'>";
 		if(		$_SESSION["mailstatus"] == "newabo") 	{echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
+		if(		$_SESSION["mailstatus"] == "invalidmail") 	{echo "Your e-mail adress seems to be wrong. Reload this page and try again.";}
 		elseif(	$_SESSION["mailstatus"] == "updated") 	{echo "We've updated your username. Thanks!";}
 		elseif(	$_SESSION["mailstatus"] == "deleted") 	{echo "We've deleted all information we had about you.";}
 		elseif(	$_SESSION["mailstatus"] == "duplicate") {echo "You are already an follower! But we send you an link where you can check everything ;)";}		
@@ -71,11 +71,10 @@ foreach ($files as $file) {
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($album."/","", $file); ?></br><?php echo formatsize(filesize($file)); ?></span>
 		
-		
-		
+
 		<?php if(isimg($file)){ // Image files ?>
 				<?php $tmpimg=$file."?r=".$res; 
-				if ($count <= 12){
+				if ($count < 10){
 				?>
 					<img data-original="<?php echo $tmpimg; ?>" src="<?php echo $tmpimg; ?>" 
 					class="lazy" width="300px" height="170px" tabindex="0">
@@ -96,7 +95,6 @@ if($count==0){?>
 	<a class="bt" href="upload.php">
 		<svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"></path><path d="M235.47 8.65C241.01 3.11 248.51 0 256.33 0s15.3 3.1 20.84 8.64l118.9 118.9c11.52 11.5 11.52 30.1 0 41.6-11.5 11.52-30.18 11.52-41.7 0l-68.57-68.5v253.13c0 16.28-13.2 29.48-29.45 29.48-16.3 0-29.5-13.2-29.5-29.5V100.67l-68.54 68.56c-11.5 11.52-30.2 11.5-41.7 0-11.5-11.5-11.5-30.18 0-41.7l118.9-118.9z"></path></g></svg>
 		upload some</a>
-	
 <?php } ?>
 </div>
 
@@ -106,7 +104,7 @@ if($count==0){?>
 </div>
 
 <script src="inc/js/lazyload.min.js"></script>
-<script>new LazyLoad({threshold: 100});</script>
+<script>new LazyLoad({threshold: 500});</script>
 <?php /*<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="inc/js/jquery.lazyload.min.js"></script> */ ?>
 

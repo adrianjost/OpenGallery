@@ -42,21 +42,20 @@ input:focus{border-color: <?php echo $color[0]; ?>;color: <?php echo $color[1]; 
 		</a>
 	</div>
 </nav>
-
-
-	<div class="box authenticate">
-		Anything went wrong!</br>
-		Please enter the AlbumID you are looking for to continue. 
-		<div class="cssbutton help">
-			<svg xmlns="http://www.w3.org/2000/svg" fill="#000" width="1rem" height="1rem" viewBox="50 50 412 412"><path d="M256 90c91.74 0 166 74.24 166 166 0 91.74-74.25 166-166 166-91.74 0-166-74.25-166-166 0-91.74 74.24-166 166-166m0-40C142.23 50 50 142.23 50 256s92.23 206 206 206 206-92.23 206-206S369.77 50 256 50zm2.02 329.5c-14.54 0-26.34-11.8-26.34-26.34s11.8-26.33 26.34-26.33c14.55 0 26.35 11.8 26.35 26.33 0 14.55-11.8 26.35-26.35 26.35zm20.72-77.85v4.74H235.3v-4.75c0-13.4 1.97-30.6 17.54-45.57 15.56-14.96 35.02-27.3 35.02-46 0-20.65-14.34-31.58-32.4-31.58-30.13 0-32.1 31.24-32.84 38.12H180.4c1.1-32.57 14.88-78.13 75.3-78.13 52.37 0 75.9 35.06 75.9 67.95 0 52.34-52.87 61.44-52.87 95.2z"/></svg>
-			<div class="inner">
-				<p>The AlbumID is the string behind the <b>?a=</b> in the link you got.</p>
-				<p>For example:</p>
-				<p style="padding-left:1rem; font-size:.75em;">https://gallery.hackedit.de/?a=<b>auVdWPtgZzEMwIKdt9</b></p>
-			</div>
+<div class="box authenticate">
+	Anything went wrong!</br>
+	Please enter the AlbumID you are looking for to continue. 
+	<div class="cssbutton help">
+		<svg xmlns="http://www.w3.org/2000/svg" fill="#000" width="1rem" height="1rem" viewBox="50 50 412 412"><path d="M256 90c91.74 0 166 74.24 166 166 0 91.74-74.25 166-166 166-91.74 0-166-74.25-166-166 0-91.74 74.24-166 166-166m0-40C142.23 50 50 142.23 50 256s92.23 206 206 206 206-92.23 206-206S369.77 50 256 50zm2.02 329.5c-14.54 0-26.34-11.8-26.34-26.34s11.8-26.33 26.34-26.33c14.55 0 26.35 11.8 26.35 26.33 0 14.55-11.8 26.35-26.35 26.35zm20.72-77.85v4.74H235.3v-4.75c0-13.4 1.97-30.6 17.54-45.57 15.56-14.96 35.02-27.3 35.02-46 0-20.65-14.34-31.58-32.4-31.58-30.13 0-32.1 31.24-32.84 38.12H180.4c1.1-32.57 14.88-78.13 75.3-78.13 52.37 0 75.9 35.06 75.9 67.95 0 52.34-52.87 61.44-52.87 95.2z"/></svg>
+		<div class="inner">
+			<p>The AlbumID is the string behind the <b>?a=</b> in the link you got.</p>
+			<p>For example:</p>
+			<p style="padding-left:1rem; font-size:.75em;">https://gallery.hackedit.de/?a=<b>auVdWPtgZzEMwIKdt9</b></p>
 		</div>
-		<form action="index.php" autocomplete="off" method="GET">
-			<input type="search" id="id" name="a" class="fullinput" placeholder="auVdWPtgZzEMwIKdt9" required></br>
-			<button type="submit" class="submit fullinput">Go...</button>
-		</form>
-</div>
+	</div>
+	<form action="index.php" autocomplete="off" method="GET">
+		<input type="search" id="id" name="a" class="fullinput" placeholder="auVdWPtgZzEMwIKdt9" required></br>
+		<button type="submit" class="submit fullinput">Go...</button>
+	</form>
+	<div id="lastgallery"></div>
+</div><script>function gC(){for(var a=a+"=",b=document.cookie.split(";"),c=0;c<b.length;c++){for(var d=b[c];" "==d.charAt(0);)d=d.substring(1);if(0==d.indexOf(a))return d.substring(a.length,d.length)}return null}"undefined"!=typeof Storage?null!==localStorage.getItem("aid")&&null!==localStorage.getItem("aname")&&(document.getElementById("lastgallery").innerHTML="<small><a href='https://gallery.hackedit.de/?a="+localStorage.getItem("aid")+"'>or go directly to \""+localStorage.getItem("aname")+'"</a></small>'):null!==gC("aid")&&null!==gC("aname")&&(document.getElementById("lastgallery").innerHTML="<small><a href='https://gallery.hackedit.de/?a="+gC("aid")+"'>or go directly to \""+gC("aname")+'"</a></small>');</script></body></html>
