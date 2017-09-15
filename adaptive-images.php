@@ -15,7 +15,7 @@
 //ini_set('memory_limit','1024M');
 ignore_user_abort(true);
 
-$resolutions   = array(300, 150); // the resolution break-points to use (screen widths, in pixels)
+$resolutions   = array(1000,300, 150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", __DIR__)."/thumbs"; // where to store the generated re-sized images. Specify from your document root!
 $jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?

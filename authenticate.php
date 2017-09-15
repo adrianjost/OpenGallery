@@ -15,8 +15,16 @@ $colors = array(
 	array("#FF5722", "#BF360C")
 );
 $color = $colors[ array_rand($colors,1)];
-include("inc/html/head.php");
 ?>
+<html><head>
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
+<title>OpenGallery ~ LogIn</title>
+<meta name="theme-color" content="<?php echo $color[1]; ?>">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<link rel="icon" type="image/vnd.microsoft.icon" href="inc/media/favicon.ico">
+<link rel="icon" type="image/png" href="inc/media/favicon.png">
+<link href="inc/css/style.css?v=25" type="text/css" rel="stylesheet">
 <style>
 body:before{background-color: <?php echo $color[0]; ?>;}
 a{color:<?php echo $color[0]; ?>;}

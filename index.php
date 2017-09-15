@@ -1,6 +1,7 @@
 <?php header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0"); ?>
 <?php 
 require("inc/functions.php");
+require("inc/sqlite.php");
 
 include("inc/html/head.php");
 ?>
@@ -47,7 +48,7 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 	} ?>
 </div>
 <div class="main box">
-<h2 id="albumname"><?php echo $albumname; ?></h2>
+<h2 id="albumname"><?php echo get_FolderName(); ?></h2>
 <?php 
 $files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
 rsort($files);
@@ -60,10 +61,17 @@ foreach ($files as $file) {
 			</a>
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($album."/","", $file); ?></br><?php echo formatsize(filesize($file)); ?></span>
+		
+		
+		
 		<?php if(isimg($file)){ // Image files ?>
-				<img data-original="<?php echo $file; ?>?r=<?php echo $res; ?>" class="lazy" width="300px" height="170px">
+				<?php $tmpimg=$file."?r="; ?>
+				<img data-original="<?php echo $file; ?>?r=<?php echo $res; ?>" 
+				class="lazy" width="300px" height="170px">
+				
+				
+				
 		<?php } else { // Video files?>
-			<?php /* /<video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video> */ ?>
 			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="inc/media/loadvideo.jpg"<?php } ?>>
 				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
 			</video>

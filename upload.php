@@ -1,5 +1,6 @@
 <?php 
 require("inc/functions.php");
+require("inc/sqlite.php");
 include("inc/html/head.php");
 ?>
 
@@ -21,7 +22,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 
 <div class="main box">
 	<div style="text-align: left;">
-		<b>Hinweise:</b>
+		<b>Hinweise:</b><br>
 		<ul style="margin-left: 2rem">
 			<li>Jede Datei darf maximal <b>90MB</b> groß sein.</li>
 			<noscript><li>Es können maximal <b>16 Dateien</b> auf einmal hochgeladen werden.</li></noscript>
@@ -34,7 +35,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	<form action="dropzoneupload.php" class="dropzone hidden" id="dropzone">
 		<div class="dz-message">
 			Drop files here<br>or click to upload.<br>
-			<span>Be carefull, the selected files are automatically uploaded.</span>
+			<span>Be carefull, the selected files are automatically uploaded and can't be removed.</span>
 		</div>
 	</form>
 	<script>

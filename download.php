@@ -2,10 +2,10 @@
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 
 require("inc/functions.php");
+require("inc/sqlite.php");
 
-
-$source = __DIR__."/".$album;
-$destination = $album."/".$album."-files";
+$source = __DIR__ ."/".$album;
+$destination = $source."/".get_FolderName()."-files";
 
 include("inc/html/head.php");
 ?>
@@ -28,31 +28,30 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	<div class='text'>
 	<?php 
 	$itemnr	= 0;
-	if((	!file_exists($album."/lastzip.txt")
-			|| (file_exists($album."/lastup.txt") 
-				&& file_exists($album."/lastzip.txt")
-				&& ( 
-					filemtime($album."/lastup.txt") > filemtime($album."/lastzip.txt") )
-				)
+	if(((	(get_lastZip()==0)
+			|| (get_lastUp()!==0 
+				&& get_lastZip()!==0
+				&& ( get_lastUp() > get_lastZip() )
+			)
 		)
 		&& !isset($_GET['i'])
-		&& !isset($_GET['n'])
-		&& !isset($_GET['list'])
+		&& !isset($_GET['n']))
+		|| isset($_GET['regenerate'])
 	){
 			
-		$files = glob($album."/*.{zip}", GLOB_BRACE);
+		$files = glob("$album/*.{zip}", GLOB_BRACE);
 		foreach ($files as $file) {unlink($file);}
 		$index	= 0;
+		updatefoldersize();
 		nextpage();
 	}
 	elseif(	isset($_GET['i'])
 		&& 	isset($_GET['n'])
-		&& !isset($_GET['list'])
 		){
 		$index = $_GET['i'];
 		$maxn  = $_GET['n'];
 		//nextpage();
-		zipData($source, $destination);
+		zipData($album, $destination);
 	}
 	else{
 		downloadpage();
@@ -60,7 +59,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	function nextpage(){
 		global $album, $index, $itemnr;
 		echo "
-			<b>Generating zip file ".($index+1)."...</b></br>
+			<b>Generating zip file ".($index+1)." of ".ceil(get_foldersize()/(115e6))."...</b></br>
 			<div class='loading'></div>
 			<span class='info' id='info' style='display:none'>Generating all zip files can take very long time... Please do nothing, we will redirect you if finished.</span></br>
 			<script type='text/javascript'>
@@ -77,7 +76,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	}
 	function downloadpage(){
 		global $album;
-		$files = glob($album."/*.{zip}", GLOB_BRACE); // all zip files
+		$files = glob("$album/*.{zip}", GLOB_BRACE); // all zip files
 		// Download all - 1 Click
 		echo "<b>Download all files at once</b><br><span class='info'>maybe your browser is going to block the pop-ups and only one file is downloaded. Then you have to use the lower links.</span>";
 		echo "<a href='javascript:download()' class='bt'>
@@ -90,7 +89,8 @@ a:hover{color:<?php echo $color[1]; ?>;}
 		foreach ($files as $file) {
 			echo "<li><a target='_blank' href='".$file."'>".basename($file)."<span class='info'>(".formatsize(filesize($file)).")</span></a></li>";
 		}
-		echo "</ul>";
+		echo "</ul></br></br>";
+		echo "<a href='download.php?regenerate' class='info'>> click here to regenerate all zip files <</a>";
 	}
 	?>
 	</div>
@@ -106,12 +106,12 @@ function zipData($source, $destination) {
 	$sumsize = 0;
 	$zip = new ZipArchive;
 	if ($zip->open($destination."-".$index.".zip", ZIPARCHIVE::CREATE) === TRUE) {
-		$files = glob($album."/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
+		$files = glob("$source/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
 		sort($files);
 		foreach ($files as $file) {
 			if ($itemnr < $maxn){$itemnr = $itemnr +1;}
 			else{
-				if (($sumsize + filesize($file)) >= 115e6){
+				if (($sumsize + filesize($file)) >= 115e6){ //ini_get('memory_limit')
 					$zip->close();
 					nextpage();
 					return;
@@ -123,9 +123,7 @@ function zipData($source, $destination) {
 		}
 		$zip->close();
 		
-		$fp = fopen($album."/lastzip.txt", 'w');
-		fwrite($fp, time());
-		fclose($fp);
+		set_lastZip();
 		
 		echo "<b>All ".($index)." files generated</b></br>
 			<span class='info' id='info'>Click continue to get them.</br>

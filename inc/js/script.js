@@ -51,13 +51,10 @@ function togglevideo(){	if(isvideo()){
 
 function loadFull(){
 	if(isimg()){
-		if($('.imgwrap.image.full > img').attr('src').indexOf("data:image/gif;") !== -1){
+		if(($('.imgwrap.image.full > img').attr('src').indexOf("data:image/gif;") !== -1)
+			|| ($('.imgwrap.image.full > img').attr('src').indexOf("?r=1000") == -1)){
 			var image = $('.imgwrap.image.full > img');
-			image.attr('src', image.attr('data-original').replace('?r=','?no='));
-		}
-		if($('.imgwrap.image.full > img').attr('src').indexOf("?r=") !== -1){
-			var image = $('.imgwrap.image.full > img');
-			image.attr('src', image.attr('data-original').replace('?r=150','').replace('?r=300',''));
+			image.attr('src', image.attr('data-original').replace('?r=150','?r=1000').replace('?r=300','?r=1000'));
 		}
 	}
 	else if (isvideo()){

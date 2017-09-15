@@ -32,6 +32,10 @@ AddCharset UTF-8 .html
 #	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs%{REQUEST_URI}.300px -f
 #	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs%{REQUEST_URI}.300px [NC,L]
 #
+#	RewriteCond %{QUERY_STRING} r=1000
+#	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs%{REQUEST_URI}.1000px -f
+#	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs%{REQUEST_URI}.1000px [NC,L]
+#
 #	RewriteCond %{QUERY_STRING} !=""
 #	RewriteCond %{REQUEST_URI} !thumbs
 #	RewriteRule \.(?:jpe?g|gif|png)$ adaptive-images.php

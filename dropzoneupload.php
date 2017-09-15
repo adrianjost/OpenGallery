@@ -1,5 +1,6 @@
 <?php
 require("inc/functions.php");
+require("inc/sqlite.php");
 
 $ds          = DIRECTORY_SEPARATOR;
 $storeFolder = $album;
@@ -19,9 +20,9 @@ if (!empty($_FILES)) {
 		
 		image_fix_orientation($targetFile);
 		
-		$fp = fopen($targetPath."/lastup.txt", 'w');
-		fwrite($fp, time());
-		fclose($fp);
+		plus_item();	// Update Database
+		plus_foldersize(filesize($targetFile));
+
 	}
 }
 

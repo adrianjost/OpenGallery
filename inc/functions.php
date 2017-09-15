@@ -8,9 +8,12 @@ elseif(isset($_SESSION["album"])){
 	$album = $_SESSION["album"];
 }
 //if(!isset($album)){header("HTTP/1.1 403 Forbidden"); exit();}
-if(!isset($album)){header("HTTP/1.1 511 Network Authentication Required"); header("Location: authenticate.php"); exit();}
+if(!isset($album) || !is_dir($album))
+{header("HTTP/1.1 511 Network Authentication Required"); header("Location: authenticate.php"); exit();}
+//else{echo $album;}
+
 // durch SQLite Abrage ersetzen
-$albumname = str_replace("u/","",$album);
+$albumid = str_replace("u/","",$album);
 
 
 $colors = array(
@@ -42,6 +45,16 @@ function isimg($fname){
 	$urlExt = pathinfo($fname, PATHINFO_EXTENSION);
 	if (in_array($urlExt, array("gif", "jpg", "jpeg", "png"))) {return True;}
 	else{ return False; }
+}
+
+function updatefoldersize(){
+	global $album;
+	$s=0;
+	$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
+	foreach ($files as $file) {
+		$s = $s + filesize($file);
+	}
+	set_foldersize($s);
 }
 
 // filesizeformat
