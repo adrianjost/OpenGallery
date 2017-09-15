@@ -15,12 +15,12 @@
 //ini_set('memory_limit','1024M');
 ignore_user_abort(true);
 
-$resolutions   = array(1000,500,300, 150); // the resolution break-points to use (screen widths, in pixels)
+$resolutions   = array(1000,500,300,150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", __DIR__)."/thumbs"; // where to store the generated re-sized images. Specify from your document root!
-$jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
+$jpg_quality   = 70; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
 $watch_cache   = TRUE; // check that the adapted image isn't stale (ensures updated source images are re-cached)
-$browser_cache = 60*60*24*7; // How long the BROWSER cache should last (seconds, minutes, hours, days. 7days by default)
+$browser_cache = 60*60*24*7*4; // How long the BROWSER cache should last (seconds, minutes, hours, days. 28 days by default)
 
 /* END CONFIG ----------------------------------------------------------------------------------------------------------
 ------------------------ Don't edit anything after this line unless you know what you're doing -------------------------
