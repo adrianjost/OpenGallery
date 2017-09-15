@@ -42,7 +42,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 		$files = glob("$album/*.{zip}", GLOB_BRACE);
 		foreach ($files as $file) {unlink($file);}
 		$index	= 0;
-		updatefoldersize();
+		updatefolder();
 		nextpage();
 	}
 	elseif(	isset($_GET['i'])

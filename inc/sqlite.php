@@ -2,12 +2,13 @@
 // Beispiel SQLite
 // Datenbankabfrage
 // Datenbankverbindung herstellen
-$dbPath = str_replace("/inc","/".$album."/sqlite3.db",__DIR__);
 
+$dbPath = str_replace("/inc","/".$album."/sqlite3.db",__DIR__);
 // Setup ###############################################################
 
+
 function create($handle){			// Datenbank für neuen Ordner erstellen
-	// Gallery : GID (varchar 32) | title (varchar 255) | lastUp (int) | lastZip (int) | items (int) | lastNewsItems (int) | size (int)
+	// Gallery : GID (varchar 32) | title (varchar 255) | lastUp (int) | lastZip (int) | items (int) | lastNewsItems (int) | lastNewsTime (int) | size (int)
 	$handle->query(
 		'CREATE TABLE IF NOT EXISTS Gallery(
 			GID varchar(64) UNIQUE,
@@ -16,6 +17,7 @@ function create($handle){			// Datenbank für neuen Ordner erstellen
 			lastZip int,
 			items int,
 			lastNewsItems int,
+			lastNewsTime int,
 			size int
 		);');
 	// EMAIL : UID (varchar 32)| FirstName (varchar 128) | email (varchar 255) | status (int)
@@ -60,7 +62,7 @@ function create_gallery($title){
 	
 	$tmpdir = str_replace("/inc","/u/".$GID,__DIR__);
 	if(!is_dir($tmpdir)){mkdir($tmpdir, 0777, true);}
-	echo $GID ."</br>";
+	//echo "<a href='index.php?a=".$GID."'>".$GID."</a></br>";
 	if(queryS("SELECT GID FROM Gallery;")==NULL){
 		query("INSERT INTO Gallery (GID, title, lastUp, lastZip, items, lastNewsItems, size) VALUES('$GID', '$title', 0, 0, 0, 0, 0);");
 	}
@@ -74,6 +76,8 @@ function plus_foldersize($size){	// verbrauchten Speicherplatz ausgeben
 	return query('UPDATE Gallery SET size = size + '.$size.';'		);}
 function set_foldersize($size){	// verbrauchten Speicherplatz ausgeben
 	return query('UPDATE Gallery SET size = '.$size.';'		);}
+function set_itemcount($count){	// verbrauchten Speicherplatz ausgeben
+	return query('UPDATE Gallery SET items = '.$count.';'		);}
 function plus_item(){		// Anzahl an Dateien im Ordner
 	set_lastUp();
 	return query('UPDATE Gallery SET items = items + 1;'	);}
@@ -101,7 +105,7 @@ function get_lastZip(){		// Zeit der letzten Zip-Erstellung
 // User-Handling
 function create_user($mail){
 	$id = md5($mail."2wok37u9w9");
-	if(get_username($id) == Null){
+	if(get_username($id) == NULL){
 		$name="Follower";
 		$status = 0;
 		query("INSERT INTO Mail (UID, FirstName, email, status) VALUES('$id', '$name', '$mail', $status);");
@@ -118,11 +122,27 @@ function delete_user($userid){
 	
 // Newsletter
 function get_users(){			// alle NutzerIDs für Newsletter ausgeben
-	return query('SELECT UID FROM Mail;');}
+	$db = connect();
+	$result = $db->query('SELECT UID FROM Mail WHERE status=1;');
+	$out = array();
+	while ($line = $result->fetchArray()){array_push($out, $line["UID"]);}
+	$db->close();
+	return $out;
+}
 function get_username($userid){	// Name der NutzerID (für Newsletters)
 	return queryS("SELECT FirstName FROM Mail WHERE UID = '$userid';");}
 function get_usermail($userid){	// E-Mail Adresse der NutzerID (für Newsletters)
 	return queryS("SELECT email FROM Mail WHERE UID = '$userid';");}
-function get_ImgsOnNewsletter($gid){ // Anzahl der Bilder die es beim letzten Newsletter gab
-	return queryS("SELECT lastNewsItems FROM Gallery WHERE GID = '$gid';");}			// ? ? ? ? ? ? ? ? ? ? ? ? Differenz muss berechnet werden!
+	
+function get_lastNewsItems(){ // Anzahl der Bilder die es beim letzten Newsletter gab
+	return queryS("SELECT lastNewsItems FROM Gallery;");}
+function set_lastNewsItems(){ // Anzahl der Bilder die es beim letzten Newsletter gab
+	
+	return query("UPDATE Gallery SET lastNewsItems = ".get_countitems().";");}
+	
+function get_lastNewsTime(){ // Zeitpunkt des letzten Newsletters
+	return queryS("SELECT lastNewsTime FROM Gallery;");}
+function set_lastNewsTime(){ // Anzahl der Bilder die es beim letzten Newsletter gab
+	return query("UPDATE Gallery SET lastNewsTime=".time().";");}
+	
 ?>

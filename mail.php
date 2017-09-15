@@ -2,9 +2,13 @@
 <?php 
 require("inc/functions.php");
 require("inc/sqlite.php");
+if(isset($_GET["id"])){
+	$id = $_GET["id"];
+}else{header("HTTP/1.1 511 Network Authentication Required"); header("Location: authenticate.php"); exit();}
+
 //$colors[ ord(substr($album, 0))%sizeof($colors)];
 
-include("inc/html/header.php");
+include("inc/html/head.php");
 ?>
 <style>
 body:before{background-color: <?php echo $color[0]; ?>;}

@@ -42,7 +42,7 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 		if(		$_SESSION["mailstatus"] == "newabo") 	{echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
 		elseif(	$_SESSION["mailstatus"] == "updated") 	{echo "We've updated your username. Thanks!";}
 		elseif(	$_SESSION["mailstatus"] == "deleted") 	{echo "We've deleted all information we had about you.";}
-		elseif(	$_SESSION["mailstatus"] == "duplicate") {echo "You are already an follower!";}		
+		elseif(	$_SESSION["mailstatus"] == "duplicate") {echo "You are already an follower! But we send you an link where you can check everything ;)";}		
 		unset($_SESSION["mailstatus"]);
 		echo "</p>";
 	} ?>

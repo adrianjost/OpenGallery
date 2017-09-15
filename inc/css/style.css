@@ -54,6 +54,7 @@ body{padding-top: 5rem;}
 	margin: 1rem auto;
 	text-align: center;
 	padding: 1rem;
+	word-wrap: break-word;
 }
 
 .main{

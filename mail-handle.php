@@ -13,12 +13,9 @@ if(isset($_GET['new']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 	$id = create_user(strip($email));
 	if ($id=="ERROR"){
 		$_SESSION["mailstatus"] = "duplicate";
-		header("Location: index.php"); 
-		exit();
-	}
+	}else{$_SESSION["mailstatus"] = "newabo";}
 	include("inc/mails/mail-subscribe.php");
 	smail($email,"OpenGallery: Please Confirm Subscription",$text);
-	$_SESSION["mailstatus"] = "newabo";
 	header("Location: index.php");
 }
 elseif(isset($_GET['subscribe'])){
@@ -34,9 +31,15 @@ elseif(isset($_GET['update']) && $_SERVER['REQUEST_METHOD'] == 'POST'){
 	$_SESSION["mailstatus"] = "updated";
 	header("Location: index.php");
 }
-elseif(isset($_GET['delete']) && $_SERVER['REQUEST_METHOD'] == 'POST'){	
+elseif(isset($_GET['delete']) && isset($_POST["id"])){	
 	// delete users
 	delete_user($_POST["id"]);
+	$_SESSION["mailstatus"] = "deleted";
+	header("Location: index.php");
+}
+elseif(isset($_GET['delete'])){	
+	// delete users
+	delete_user($_GET["delete"]);
 	$_SESSION["mailstatus"] = "deleted";
 	header("Location: index.php");
 }

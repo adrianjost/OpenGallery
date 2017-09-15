@@ -47,14 +47,17 @@ function isimg($fname){
 	else{ return False; }
 }
 
-function updatefoldersize(){
+function updatefolder(){
 	global $album;
 	$s=0;
-	$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
+	$c=0;
+	$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE|GLOB_NOSORT);
 	foreach ($files as $file) {
 		$s = $s + filesize($file);
+		$c = $c + 1;
 	}
 	set_foldersize($s);
+	set_itemcount($c);
 }
 
 // filesizeformat
@@ -67,10 +70,4 @@ function formatsize($bytes){
 	return $bytes;
 }
 
-// ########################
-// mail.php
-// ########################
-if(isset($_GET["id"])){
-	$id = $_GET["id"];
-}
 ?>
