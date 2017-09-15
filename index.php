@@ -46,11 +46,11 @@ function loadEXT(a,b){var c=new XMLHttpRequest;c.open("GET",a,!0),c.onreadystate
 		</form>
 	<?php }else{
 		echo "<p style='display:block;padding:.5rem;font-size:1.2rem;'>";
-		if(		$_SESSION["mailstatus"] == "newabo") 	{echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
-		if(		$_SESSION["mailstatus"] == "invalidmail") 	{echo "Your e-mail adress seems to be wrong. Reload this page and try again.";}
-		elseif(	$_SESSION["mailstatus"] == "updated") 	{echo "We've updated your username. Thanks!";}
-		elseif(	$_SESSION["mailstatus"] == "deleted") 	{echo "We've deleted all information we had about you.";}
-		elseif(	$_SESSION["mailstatus"] == "duplicate") {echo "You are already an follower! But we send you an link where you can check everything ;)";}		
+		if(		$_SESSION["mailstatus"] == "newabo") 	 {echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
+		if(		$_SESSION["mailstatus"] == "invalidmail"){echo "Your e-mail adress seems to be wrong. Reload this page and try again.";}
+		elseif(	$_SESSION["mailstatus"] == "updated") 	 {echo "We've updated your username. Thanks!";}
+		elseif(	$_SESSION["mailstatus"] == "deleted") 	 {echo "We've deleted all information we had about you.";}
+		elseif(	$_SESSION["mailstatus"] == "duplicate")  {echo "You are already an follower! But we send you an link where you can check everything ;)";}		
 		unset($_SESSION["mailstatus"]);
 		echo "</p>";
 	} ?>
