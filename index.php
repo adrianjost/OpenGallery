@@ -1,12 +1,14 @@
 <?php if($_GET['a']=="abifahrt2"){header("Location: index.php?a=abifahrt");exit();}?>
+<?php header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0"); ?>
 <html><head>
-
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=false">
+<script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script defer src="jquery.lazyload.min.js?v3"></script>
 <style>
 html,body,h1,h2,h3,h4,h5,p,a{margin:0;padding:0; font-family: "Segoe UI", Arial;}
 .body{position:relative; -webkit-text-size-adjust: 100%; line-height: initial; background: #000 url("https://source.unsplash.com/collection/242611") no-repeat center; background-size: cover;}
 body{position:relative; line-height: initial; background: #2196F3;}
-a{color:#2196F3;}
+a{color:#2196F3; text-decoration: none;}
 ul,li{list-style: none;padding-left: .5rem;margin:0;}
 
 .header{ display: inline-block; position: fixed; top: 0; left:0; z-index: 9999; width:100%; background: #fff; border-bottom: 1px #ccc solid;}
@@ -63,12 +65,13 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 .imgwrap .filename{
 	position: absolute;
 	display:none;
-	top: 3px;
-	left: 3px;
+	top: 0; left: 0;
 	overflow: hidden;
 	color: #fff;
+	text-align: left;
 	font-size:.6rem;
-	text-shadow: 0 0 5px #000;
+	text-shadow: 0 0 10px #000;
+	padding:5px;
 }
 .imgwrap:hover .filename{
 	display:block;
@@ -87,14 +90,27 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
     background: rgba(0,0,0,.9);
     margin: 0;
 }
+.imgwrap.full:before{
+	content:"✕";
+	color:#fff;
+	position: absolute;
+	top:0; right:0;
+	padding:5px;
+	font-size:1.5rem;
+	line-height:1.2rem;
+}
 .imgwrap.full img{    
 	display: block;
-	vertical-align: middle;
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+	   -moz-transform: translate(-50%, -50%);
+		-ms-transform: translate(-50, -50);
+		 -o-transform: translate(-50, -50);
+			transform: translate(-50, -50);
 	width:auto;
+	height: auto;
 	max-width: 95%;
 	max-height:95%;
 }
@@ -147,30 +163,37 @@ function isimg($fname){
 <div class="main">
 
 <?php 
-//foreach (glob("$album/*.{jpg,kpeg,png,gif}", GLOB_BRACE) as $file) {
-	
-//$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE);
-//usort($files, create_function('$b, $a', 'return filemtime($a) - filemtime($b);'));
+// mobile detection
+if (preg_match('@(iPod|iPhone|Android|Mobil|BlackBerry|Windows Phone|SymbianOS|Opera Mini|Nokia|SonyEricsson)@', $_SERVER['HTTP_USER_AGENT'])){$res = 150; $ismobile=true;}
+else{$res = 300;$ismobile=false;}
 
-$files = array_reverse (glob("$album/*.{jpg,jpeg,png,gif,mp4,webm,ogg}", GLOB_BRACE));
+// filesizeformat
+function formatsize($bytes){
+	if 	($bytes >= 1048576)		{$bytes = number_format($bytes / 1048576, 2) . ' MB';}
+	elseif 	($bytes >= 1024)		{$bytes = number_format($bytes / 1024, 2) . ' KB';}
+	elseif 	($bytes > 1)			{$bytes = $bytes . ' bytes';}
+	elseif 	($bytes == 1)			{$bytes = $bytes . ' byte';}
+	else							{$bytes = '0 bytes';}
+	return $bytes;
+}
+
+$files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
+rsort($files);
 foreach ($files as $file) {
 ?>
-	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>" <?php if(isimg($file)){ ?> onclick="$(this).toggleClass('full');if($(this).hasClass('full')){var image = $('.imgwrap.full > img');image.attr('src', image.attr('data-original').replace('?r=300','?r=l'));}" <?php } ?>>
+	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>" <?php if(isimg($file)){ ?> onclick="$(this).toggleClass('full');if($(this).hasClass('full')){var image = $('.imgwrap.full > img');image.attr('src', image.attr('data-original').replace('?r=<?php echo $res; ?>',''));}" <?php } ?>>
 		<?php if (isset($_GET['admin'])){ // Delete Button?>
 			<a class="delete" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ea4335" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
 			</a>
 		<?php } ?>
-		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></span>
-		<?php if(isimg($file)){?>
-			<!-- <a href="<?php echo $file; ?>?r=l"> -->
-				<img data-original="<?php echo $file; ?>?r=300" class="lazy" width="300px" height="170px">
-				<noscript><img src="<?php echo $file; ?>?r=300"></noscript>
-			<!-- </a> -->
-		<?php } else {?>
+		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></br><?php echo formatsize(filesize($file)); ?></span>
+		<?php if(isimg($file)){ // Image files?>
+				<img data-original="<?php echo $file; ?>?r=<?php echo $res; ?>" class="lazy" width="300px" height="170px">
+				<noscript><img src="<?php echo $file; ?>?r=<?php echo $res; ?>"></noscript>
+		<?php } else { // Video files?>
 			<?php /* /<video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video> */ ?>
-			<video width="300px" height="170px" controls <?php // autobuffer onclick="load();play();" ?>>
-				<source src="<?php echo $file; ?>">
+			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="loadvideo.jpg" onclick="var sourceFile = $(this).attr('data-src');$(this).attr('src', sourceFile);$(this).load();" <?php } ?>>
 				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
 			</video>
 			<noscript><video src="<?php echo $file; ?>" controls>Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video></noscript>
@@ -182,16 +205,5 @@ foreach ($files as $file) {
 
 </div>
 <?php // End-Backups ?>
-<p style="text-align:center;color:#fff;padding:5px;font-size:.6rem;">&copy; Copyright Adrian Jost</p>
-
-
-<script>//function init(){var imgDefer=document.getElementsByTagName('img');for(var i=0;i<imgDefer.length;i++){if(imgDefer[i].getAttribute('data-src')){imgDefer[i].setAttribute('src',imgDefer[i].getAttribute('data-src'));}}}window.onload=init;</script>
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script src="jquery.lazyload.min.js"></script>
-<script type="text/javascript" charset="utf-8">
-$("img.lazy").show().lazyload({effect : "fadeIn"});
-//$("video.lazy").show().each(function() {var sourceFile = $(this).attr("data-src");$(this).attr("src", sourceFile);$(this).load();})
-
-</script>
+<p style="text-align:center;color:#fff;padding:5px;font-size:.6rem;">&copy; Copyright <a href="https://adrianjost.hackedit.de" rel="nofollow" style="color:#fff";>Adrian Jost</a></p>
 </body></html>

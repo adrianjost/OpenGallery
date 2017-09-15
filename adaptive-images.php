@@ -11,11 +11,11 @@
    Adaptive Images by Matt Wilcox is licensed under a Creative Commons Attribution 3.0 Unported License.
 
 /* CONFIG ----------------------------------------------------------------------------------------------------------- */
-ini_set('max_execution_time', 6000);
-ini_set('memory_limit','1024M');
+//ini_set('max_execution_time', 6000);
+//ini_set('memory_limit','1024M');
 ignore_user_abort(true);
 
-$resolutions   = array(1000, 750, 500, 300, 200, 150); // the resolution break-points to use (screen widths, in pixels)
+$resolutions   = array(300, 150); // the resolution break-points to use (screen widths, in pixels)
 $cache_path    = "gallery/thumbs"; // where to store the generated re-sized images. Specify from your document root!
 $jpg_quality   = 75; // the quality of any generated JPGs on a scale of 0 to 100
 $sharpen       = TRUE; // Shrinking images can blur details, perform a sharpen on re-scaled images?
@@ -48,7 +48,10 @@ function sendImage($filename, $browser_cache) {
 	global $source_file;
 	if (filesize($filename) <= 2000){
 		unlink($filename);
-		$filename = $source_file;
+		//$filename = $source_file;
+		//$filename = "sorry.jpg";
+		header('Location: https://gallery.hackedit.de/sorry.jpg');
+		exit();
 	}
 	$extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
 	if (in_array($extension, array('png', 'gif', 'jpeg'))) {
@@ -57,6 +60,8 @@ function sendImage($filename, $browser_cache) {
 	header("Content-Type: image/jpeg");
 	}
 	header("Cache-Control: private, max-age=".$browser_cache);
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
+	header('Date: '.gmdate('D, d M Y H:i:s', time()+0).' GMT');
 	header('Expires: '.gmdate('D, d M Y H:i:s', time()+$browser_cache).' GMT');
 	header('Content-Length: '.filesize($filename));
 	readfile($filename);

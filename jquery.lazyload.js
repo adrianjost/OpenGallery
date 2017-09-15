@@ -240,3 +240,5 @@
     });
 
 })(jQuery, window, document);
+
+$("img.lazy").show().lazyload({effect : "fadeIn"});

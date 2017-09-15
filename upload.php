@@ -5,7 +5,7 @@ html,body,h1,h2,h3,h4,h5,p,a{margin:0;padding:0; font-family: "Segoe UI", Arial;
 .body{position:relative; line-height: initial; background: #000 url("https://source.unsplash.com/collection/242611") no-repeat center; background-size: cover;}
 body{position:relative; line-height: initial; background: #fff;}
 a{color:#2196F3;}
-ul,li{list-style: none;padding-left: .5rem; font-size: 1rem; margin:0;}
+ul,li{padding-left: .5rem; font-size: 1rem; margin:0;}
 
 .header{ display: inline-block; position: fixed; top: 0; left:0; z-index: 9999; width:100%; background: #fff; border-bottom: 1px #ccc solid;}
 .header::after{content=" "; clear:both;}
@@ -90,22 +90,43 @@ ul,li{list-style: none;padding-left: .5rem; font-size: 1rem; margin:0;}
 <?php // Backups ?>
 
 <div class="main">
+	<div style="text-align: left; display: inline-block;">
+		<?php // <h2>Der Upload von Dateien >1MB funktioniert derzeit nicht. </br>Es wird an einer Lösung gearbeitet...</h2></br> ?>
+		<b>Hinweise:</b>
+		<ul style="margin-left: 1rem;">
+			<li>Es können maximal <b>90MB</b> bzw. <b>16 Dateien</b> auf einmal hochgeladen werden.</li>
+			<li>Nur die Formate ".jp(e)g", ".png", ".gif", ".mp4", ".ogg", ".webm" sind erlaubt.</li>
+		</ul>
+	</div>
 	<form method="post" action="fileupload.php?a=<?php echo $album; ?>" enctype="multipart/form-data">
 		<div class="fileUpload">
-			<span>Dateien auswählen</span>  
+			<span>1. Dateien auswählen</span>  
 			<input type="file" id="filesToUpload" name="files[]" multiple="multiple" onchange="makeFileList();" accept="image/*,video/*" />
 		</div>
 		
 		
-		<ul id="fileList"></ul>
+		<ul id="fileList" style="list-style: none;"></ul>
+		<p><b id="filesize"></b></p>
 		<input type="submit" id="submitimg" value="Upload!" />
 		<label id="Lsubmitimg" for="submitimg">
 			<svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"></path><path d="M235.47 8.65C241.01 3.11 248.51 0 256.33 0s15.3 3.1 20.84 8.64l118.9 118.9c11.52 11.5 11.52 30.1 0 41.6-11.5 11.52-30.18 11.52-41.7 0l-68.57-68.5v253.13c0 16.28-13.2 29.48-29.45 29.48-16.3 0-29.5-13.2-29.5-29.5V100.67l-68.54 68.56c-11.5 11.52-30.2 11.5-41.7 0-11.5-11.5-11.5-30.18 0-41.7l118.9-118.9z"></path></g></svg>
-			Upload
+			2. Upload
 		</label>
+		
 	</form>
 	<!-- list Files to Upload -->
-	<script type="text/javascript">function makeFileList(){for(var e=document.getElementById("filesToUpload"),i=document.getElementById("fileList");i.hasChildNodes();)i.removeChild(i.firstChild);for(var l=0;l<e.files.length;l++){var t=document.createElement("li");t.innerHTML=e.files[l].name,i.appendChild(t)}if(!i.hasChildNodes()){var t=document.createElement("li");t.innerHTML="No Files Selected",i.appendChild(t)}}makeFileList();</script>
+	<script type="text/javascript">
+	function hfs(o){var t=Math.floor(Math.log(o)/Math.log(1024));return 1*(o/Math.pow(1024,t)).toFixed(2)+["B","kB","MB","GB"][t]}	
+	function makeFileList(){var fs=0; var fn=0;
+		for(var e=document.getElementById("filesToUpload"),i=document.getElementById("fileList");i.hasChildNodes();)
+		i.removeChild(i.firstChild);
+		for(var l=0;l<e.files.length;l++){var t=document.createElement("li");t.innerHTML=e.files[l].name+" ("+hfs(e.files[l].size) 	+")",fs+=e.files[l].size,fn+=1,i.appendChild(t)}
+		if(!i.hasChildNodes()){var t=document.createElement("li");t.innerHTML="No Files Selected",i.appendChild(t)}
+		else{document.getElementById("filesize").innerHTML=fn+" Files ("+hfs(fs)+") selected to upload"; 
+			if((fn>16) || (fs>(90*1024*1024))){document.getElementById("filesize").style="color:#f00";document.getElementById("submitimg").disabled="disabled";document.getElementById("Lsubmitimg").style="background:#ccc"}
+			else{document.getElementById("filesize").style="";document.getElementById("submitimg").removeAttribute("disabled");document.getElementById("Lsubmitimg").style=""}
+		}
+	}makeFileList();</script>
 </div>
 <?php // End-Backups ?>
 </body></html>
