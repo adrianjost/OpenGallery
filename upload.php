@@ -21,9 +21,8 @@ a:hover{color:<?php echo $color[1]; ?>;}
 
 <div class="main box">
 	<div style="text-align: left;">
-		<?php // <h2>Der Upload von Dateien >1MB funktioniert derzeit nicht. </br>Es wird an einer Lösung gearbeitet...</h2></br> ?>
 		<b>Hinweise:</b>
-		<ul style="margin-left: 2rem;width:100%;">
+		<ul style="margin-left: 2rem">
 			<li>Jede Datei darf maximal <b>90MB</b> groß sein.</li>
 			<noscript><li>Es können maximal <b>16 Dateien</b> auf einmal hochgeladen werden.</li></noscript>
 			<li>Nur die Formate ".jp(e)g", ".png", ".gif", ".mp4", ".ogg", ".webm" sind erlaubt.</li>
@@ -32,7 +31,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	
 	
 	<script src="inc/js/dropzone.min.js"></script>
-	<form action="dropzoneupload.php?a=<?php echo $album; ?>" class="dropzone hidden" id="dropzone">
+	<form action="dropzoneupload.php" class="dropzone hidden" id="dropzone">
 		<div class="dz-message">
 			Drop files here<br>or click to upload.<br>
 			<span>Be carefull, the selected files are automatically uploaded.</span>
@@ -44,7 +43,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	var myDropzone = new Dropzone(
 		"#dropzone", 
 		{ 
-			url: "dropzoneupload.php?a=<?php echo $album; ?>",
+			url: "dropzoneupload.php",
 			parallelUploads: 5,
 			maxFilesize: 90,
 			addRemoveLinks:false,
@@ -56,7 +55,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	</script>	
 
 	<noscript>	
-		<form method="post" action="noscriptupload.php?a=<?php echo $album; ?>" class="noscriptform" enctype="multipart/form-data">
+		<form method="post" action="noscriptupload.php" class="noscriptform" enctype="multipart/form-data">
 			<input type="file" name="files[]" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,.mp4,.ogg,.webm"/></br>
 			<input type="submit" id="submitimg" value="Upload!" />
 			<label id="Lsubmitimg" for="submitimg">

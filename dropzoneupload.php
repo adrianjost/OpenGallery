@@ -12,14 +12,14 @@ if (!empty($_FILES)) {
 	elseif(!in_array(strtolower($ext), $valid_formats) ){header("HTTP/1.1 415 Unsupported Media Type");}
 	else{
 		$tempFile = $_FILES['file']['tmp_name'];         
-		$targetPath = dirname( __FILE__ ) . $ds. $storeFolder . $ds;
+		$targetPath = __DIR__ . $ds. $storeFolder . $ds;
 		$filename = time()."-".$_FILES['file']['name'];
 		$targetFile =  $targetPath . str_replace(".".$ext, ".".strtolower($ext), $filename);
 		move_uploaded_file($tempFile,$targetFile);
 		
 		image_fix_orientation($targetFile);
 		
-		$fp = fopen($album."/lastup.txt", 'w');
+		$fp = fopen($targetPath."/lastup.txt", 'w');
 		fwrite($fp, time());
 		fclose($fp);
 	}

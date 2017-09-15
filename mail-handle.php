@@ -11,26 +11,34 @@ if(isset($_GET['new']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 	$email = $_POST["email"];
 	if (!ismail($email)){exit();}
 	$id = create_user(strip($email));
-	if ($id=="ERROR"){header("Location: https://gallery.hackedit.de/?a=$album&frommail&duplicate");exit();}
+	if ($id=="ERROR"){
+		$_SESSION["mailstatus"] = "duplicate";
+		header("Location: index.php"); 
+		exit();
+	}
 	include("inc/mails/mail-subscribe.php");
 	smail($email,"OpenGallery: Please Confirm Subscription",$text);
-	header("Location: https://gallery.hackedit.de/?a=$album&frommail&newabo");
+	$_SESSION["mailstatus"] = "newabo";
+	header("Location: index.php");
 }
 elseif(isset($_GET['subscribe'])){
 	// change status to 1
 	$id = $_GET["subscribe"];	
 	enable_user($id);
-	header("Location: https://gallery.hackedit.de/mail.php?a=$album&id=$id&frommail&subscribed");
+	$_SESSION["mailstatus"] = "subscribed";
+	header("Location: mail.php");
 }
 elseif(isset($_GET['update']) && $_SERVER['REQUEST_METHOD'] == 'POST'){	
 	// update users name
 	update_username($_POST["id"], strip( $_POST["name"]	));
-	header("Location: https://gallery.hackedit.de/?a=$album&frommail&updated");
+	$_SESSION["mailstatus"] = "updated";
+	header("Location: index.php");
 }
 elseif(isset($_GET['delete']) && $_SERVER['REQUEST_METHOD'] == 'POST'){	
 	// delete users
 	delete_user($_POST["id"]);
-	header("Location: https://gallery.hackedit.de/?a=$album&frommail&deleted");
+	$_SESSION["mailstatus"] = "deleted";
+	header("Location: index.php");
 }
 
 

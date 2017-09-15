@@ -27,6 +27,15 @@ nav ul li:hover{background: rgba(255,255,255,.5);}
 #navtoggle{display:none; float:right; padding: .5rem 1rem; font-size:1.5rem; transition: all .3s ease-in-out;}
 nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
 
+li.share{position:relative;}
+
+li.share .noti {transition: all .3s ease-in-out; transition-delay:1s;
+	position:absolute; margin:4rem .5rem 0; top:0; right:-26rem; background:#fff; width:19rem; text-align: left; border:2px solid #555;}
+li.share .noti span{display:inline-block; width:4rem; height:4rem; background: #555 url("data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20724.18%20806.76%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22%23fff%22%20color%3D%22%23000%22%3E%3Cpath%20d%3D%22M593.95%20546.3c71.92%200%20130.23%2058.3%20130.23%20130.23%200%2071.92-58.3%20130.23-130.23%20130.23-71.92%200-130.22-58.3-130.22-130.23%200-71.92%2058.3-130.22%20130.22-130.22zm0-546.3c71.92%200%20130.23%2058.3%20130.23%20130.22%200%2071.93-58.3%20130.23-130.23%20130.23-71.92%200-130.22-58.3-130.22-130.23C463.73%2058.3%20522.03%200%20593.95%200zM130.22%20273.15c71.93%200%20130.23%2058.3%20130.23%20130.23%200%2071.92-58.3%20130.22-130.23%20130.22C58.3%20533.6%200%20475.3%200%20403.38s58.3-130.23%20130.22-130.23z%22%20overflow%3D%22visible%22/%3E%3Cpath%20d%3D%22M512.86%20665.27L99.1%20426.4l25.88-44.84%20413.76%20238.9z%22%20overflow%3D%22visible%22/%3E%3Cpath%20d%3D%22M516.55%20146.05L102.8%20384.95l25.87%2044.8L542.43%20190.9z%22%20overflow%3D%22visible%22/%3E%3C/g%3E%3C/svg%3E") no-repeat center;background-size: 2rem;}
+li.share .noti .notitxt{position:absolute; top:0; left: 4rem;display:inline-block; width: 15rem; height:4rem;}
+li.share .noti .notitxt .sharelink{display:inline-block; margin: 1rem; padding: 0 .5rem; width:13rem; height:2rem;  overflow-x:scroll; background:#fff; border:1px solid #aaa;}
+li.share:hover .noti { right:0; transition-delay:0s;}
+
 
 .hidden{display:none;}
 /* Lazyload CSS */
@@ -44,6 +53,7 @@ body{padding-top: 5rem;}
     box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.19), 0 2px 6px 0 rgba(0, 0, 0, 0.2);
 	margin: 1rem auto;
 	text-align: center;
+	padding: 1rem;
 }
 
 .main{
@@ -179,7 +189,6 @@ a.galleryprev{left:1rem;}
 	border-bottom: 2px solid #aaa;
 	outline:none;
 }
-
 button.submit{
 	border: 3px solid #fff;    
     color: #fff;
@@ -219,6 +228,13 @@ button.submit:focus:after{width: 100%;z-index: -1;}
 .mailOpt input{border: none; border-bottom:3px solid #ccc; outline:none; padding: 1.2rem .5rem;text-transform: uppercase;font-weight: 700;background:#fff;}
 .mailOpt input,.mailOpt button{width:100%; margin: .5rem 0;}
 .mailOpt label{display:block; margin:.5rem 0 0;}
+
+/* authenticate.php */
+.cssbutton.help{display:inline; width:1rem; height:1rem;}
+.cssbutton .inner{visibility:hidden; max-width:0; max-height:0; margin:0;overflow:hidden; padding:0;font-size: .8em; border:0px solid transparent; text-align:left; transition: all .3s ease-in-out; transition-delay:1s;}
+.cssbutton:hover .inner{visibility:visible; max-width:100%; width:auto; max-height:10rem; height:auto; padding: .5rem 1rem; margin:1rem 0; border:1px solid #aaa; transition-delay:0s;}
+.fullinput{width:100%; padding:1rem .5rem; margin:1rem 0; font-size: 1.5rem; outline:none; border:3px solid #aaa;}
+.box.authenticate{font-size:1.2rem;}
 
 /* upload.php */
 .dropzone {border-radius: 5px;background: #fff;margin:2rem;}

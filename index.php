@@ -27,8 +27,8 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 	</div>
 </noscript>
 <div class="mail box">
-	<?php if(!isset($_GET["frommail"])){ ?>
-		<form action="mail-handle.php?new&a=<?php echo $album; ?>" autocomplete="on" method="POST">
+	<?php if(!isset($_SESSION["mailstatus"])){ ?>
+		<form action="mail-handle.php?new" autocomplete="on" method="POST">
 			<div class="input">
 				<input type="text" name="name" hidden value="">
 				<label for="q1">Get notified on new uploads. Enter your Mail:</label>
@@ -38,15 +38,16 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 		</form>
 	<?php }else{
 		echo "<p style='display:block;padding:.5rem;font-size:1.2rem;'>";
-		if(		isset($_GET["newabo"])) 	{echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
-		elseif(	isset($_GET["updated"]))	{echo "We've updated your username. Thanks!";}
-		elseif(	isset($_GET["deleted"]))	{echo "We've deleted all information we had about you.";}
-		elseif(	isset($_GET["duplicate"]))	{echo "You are already an follower!";}
+		if(		$_SESSION["mailstatus"] == "newabo") 	{echo "We've send you an e-mail. Please confirm your mail by clicking the link in the mail.";}
+		elseif(	$_SESSION["mailstatus"] == "updated") 	{echo "We've updated your username. Thanks!";}
+		elseif(	$_SESSION["mailstatus"] == "deleted") 	{echo "We've deleted all information we had about you.";}
+		elseif(	$_SESSION["mailstatus"] == "duplicate") {echo "You are already an follower!";}		
+		unset($_SESSION["mailstatus"]);
 		echo "</p>";
 	} ?>
 </div>
 <div class="main box">
-<h2 id="albumname"><?php echo $album; ?></h2>
+<h2 id="albumname"><?php echo $albumname; ?></h2>
 <?php 
 $files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
 rsort($files);

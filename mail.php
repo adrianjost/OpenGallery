@@ -19,17 +19,17 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 include("inc/html/nav.php");
 // End-Header ?>
 <?php // Main 
-$id = $_GET["id"];
+
 ?>
 <div class="main box">
-	<form class="mailOpt" action="mail-handle.php?update&a=<?php echo $album; ?>" autocomplete="on" method="POST">
+	<form class="mailOpt" action="mail-handle.php?update" autocomplete="on" method="POST">
 		<input type="text" name="id" hidden style="display:none;" value="<?php echo $id; ?>">
 		<label for="name">Enter your Name so we can write more personal mails to you</label>
 		<input type="text" name="name" placeholder="Adrian Jost" value="<?php echo get_username($id);?>">
 		</br>
 		<button type="submit" class="submit">Update</button>
 	</form>
-	<form class="mailOpt" action="mail-handle.php?delete&a=<?php echo $album; ?>" autocomplete="on" method="POST">
+	<form class="mailOpt" action="mail-handle.php?delete" autocomplete="on" method="POST">
 		<label>You aren't happy? We can unsubscribe you from this mailing-list</label>
 		<input type="text" name="id" hidden style="display:none;" value="<?php echo $id; ?>">
 		<button type="submit" class="submit">Delete Me (<?php echo get_usermail($id);?>)</button>

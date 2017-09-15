@@ -1,6 +1,17 @@
 <?php 
-if(!isset($_GET['a'])){header("HTTP/1.1 403 Forbidden"); header("Location: upload.php"); exit();}
-$album = "u/".$_GET['a'];
+session_start(); 
+if(isset($_GET['a'])){
+	$album = "u/".$_GET['a'];
+	$_SESSION["album"] = $album;
+}
+elseif(isset($_SESSION["album"])){
+	$album = $_SESSION["album"];
+}
+//if(!isset($album)){header("HTTP/1.1 403 Forbidden"); exit();}
+if(!isset($album)){header("HTTP/1.1 511 Network Authentication Required"); header("Location: authenticate.php"); exit();}
+// durch SQLite Abrage ersetzen
+$albumname = str_replace("u/","",$album);
+
 
 $colors = array(
 	array("#F44336", "#B71C1C"),
@@ -15,7 +26,7 @@ $colors = array(
 	array("#CDDC39", "#827717"),
 	array("#FFC107", "#FF6F00"),
 	array("#FF9800", "#E65100"),
-	array("#FF5722", "##BF360C")
+	array("#FF5722", "#BF360C")
 );
 $color = $colors[ array_rand($colors,1)];
 
@@ -41,5 +52,12 @@ function formatsize($bytes){
 	elseif 	($bytes == 1)			{$bytes = $bytes . ' byte';}
 	else							{$bytes = '0 bytes';}
 	return $bytes;
+}
+
+// ########################
+// mail.php
+// ########################
+if(isset($_GET["id"])){
+	$id = $_GET["id"];
 }
 ?>

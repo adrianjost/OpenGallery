@@ -65,12 +65,12 @@ a:hover{color:<?php echo $color[1]; ?>;}
 			<span class='info' id='info' style='display:none'>Generating all zip files can take very long time... Please do nothing, we will redirect you if finished.</span></br>
 			<script type='text/javascript'>
 			document.getElementById('info').removeAttribute('style');
-			window.location = 'download.php?a=".$album."&i=".($index + 1)."&n=".$itemnr."'</script>
+			window.location = 'download.php?i=".($index + 1)."&n=".$itemnr."'</script>
 
 			
 			<noscript>
 			<b class='info' style='font-size:1rem;'>You have to click this link to continue, because you disabled Javascript in your browser</b>
-			<a href='download.php?a=".$album."&i=".($index + 1)."&n=".$itemnr."' class='bt'>CONTINUE
+			<a href='download.php?i=".($index + 1)."&n=".$itemnr."' class='bt'>CONTINUE
 			<svg style='height:.8rem;' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 46'><path d='M1.76 1.3L15.74 23 1.76 44.7' fill='none' stroke='#fff' stroke-width='15'></path></svg>
 			</a></noscript>
 					";
@@ -130,10 +130,10 @@ function zipData($source, $destination) {
 		echo "<b>All ".($index)." files generated</b></br>
 			<span class='info' id='info'>Click continue to get them.</br>
 			
-			<a href='download.php?a=".$album."' class='bt'>CONTINUE
+			<a href='download.php' class='bt'>CONTINUE
 			<svg style='height:.8rem;' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 46'><path d='M1.76 1.3L15.74 23 1.76 44.7' fill='none' stroke='#fff' stroke-width='15'></path></svg>
 			</a>
-			<script type='text/javascript'>window.location = 'download.php?a=".$album."'</script>";
+			<script type='text/javascript'>window.location = 'download.php'</script>";
 		
 		
 	} else { //echo 'failed'; 

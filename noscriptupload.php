@@ -26,10 +26,10 @@ if(isset($_POST) and $_SERVER['REQUEST_METHOD'] == "POST"){
 	}
 }
 
-$fp = fopen($album."/lastup.txt", 'w');
+$fp = fopen($path."/lastup.txt", 'w');
 fwrite($fp, time());
 fclose($fp);
 
-header("Location: index.php?a=".$album);
+header("Location: index.php");
 exit();
 ?>
