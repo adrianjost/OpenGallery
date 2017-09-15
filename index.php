@@ -47,8 +47,9 @@ $color = $colors[ array_rand($colors,1)];
 <link rel="icon" type="image/vnd.microsoft.icon" href="inc/favicon.ico">
 <link rel="icon" type="image/png" href="inc/favicon.png">
 <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script defer src="inc/jquery.lazyload.min.js?v3"></script>
-<link href="inc/style.css?v=24" type="text/css" rel="stylesheet">
+<?php //<script defer src="inc/jquery.lazyload.min.js?v3"></script> ?>
+<script defer src="inc/script.js?v5"></script>
+<link href="inc/style.css?v=25" type="text/css" rel="stylesheet">
 <style>
 body:before{background-color: <?php echo $color[0]; ?>;}
 a{color:<?php echo $color[0]; ?>;}
@@ -64,7 +65,7 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 	<div class="title">
 		<a href="/?a=<?php echo $album; ?>">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1800"><path d="M932.14 845.75q0-14.05-9.04-23.1-9.04-9.03-23.1-9.03-66.3 0-113.5 47.2-47.2 47.17-47.2 113.43 0 14.05 9.03 23.1 9.04 9.02 23.1 9.02 14.06 0 23.1-9.03 9.04-9.04 9.04-23.1 0-40.15 28.13-68.26 28.12-28.1 68.3-28.1 14.06 0 23.1-9.04 9.04-9.04 9.04-23.1zm225 130.5q0 106.42-75.33 181.7-75.32 75.3-181.8 75.3-106.46 0-181.8-75.3-75.33-75.28-75.33-181.7 0-106.4 75.33-181.7 75.33-75.3 181.8-75.3 106.47 0 181.8 75.3 75.34 75.3 75.34 181.7zM128.57 1552.5h1542.86V1424H128.57v128.5zM1285.7 976.26q0-159.62-113-272.56T900 590.76q-159.7 0-272.7 112.94t-113 272.56q0 159.62 113 272.56T900 1361.76q159.7 0 272.7-112.94t113-272.56zM257.15 331.76h385.72v-128.5H257.14v128.5zM128.57 524.5h1542.86v-257h-831.7L775.45 396H128.57v128.5zM1800 267.5v1285q0 53.2-37.67 90.85-37.66 37.65-90.9 37.65H128.57q-53.24 0-90.9-37.65Q0 1605.7 0 1552.5v-1285q0-53.2 37.67-90.85Q75.33 139 128.57 139h1542.86q53.24 0 90.9 37.65Q1800 214.3 1800 267.5z" fill="#fff"/></svg>
-			Galerie<span id="albumname"> <?php echo $album; ?></span>
+			OpenGallery<span id="albumname"> <?php echo $album; ?></span>
 		</a>
 	</div>
 	<div id="navtoggle" class="navtoggle"><a href="javascript:document.getElementById('navigation').classList.toggle('open');">&#9776;</a></div>
@@ -81,6 +82,11 @@ button.submit:after{background: <?php echo $color[0]; ?>;}
 </nav>
 <?php // End-Header ?>
 <?php // Backups ?>
+<noscript>
+	<div class="noscript box">
+		<h2 style="margin:0; padding:1rem;">Sorry, but you need JavaScript to view this site.</h2>
+	</div>
+</noscript>
 <div class="mail box">
 	<?php if(!isset($_GET["frommail"])){ ?>
 		<form action="inc/mail-handle.php?new&a=<?php echo $album; ?>" autocomplete="on" method="POST">
@@ -107,27 +113,32 @@ $files = glob("$album/*.{jpg,jpeg,png,gif,mp4,ogg,webm}", GLOB_BRACE);
 rsort($files);
 foreach ($files as $file) {
 ?>
-	<div class="imgwrap <?php if(!isimg($file)){echo "video";} ?>" <?php if(isimg($file)){ ?> onclick="$(this).toggleClass('full');if($(this).hasClass('full')){var image = $('.imgwrap.full > img');image.attr('src', image.attr('data-original').replace('?r=<?php echo $res; ?>',''));}" <?php } ?>>
+	<div class="imgwrap <?php if(!isimg($file)){echo "video";}else{echo "image";} ?>">
 		<?php if (isset($_GET['admin'])){ // Delete Button?>
 			<a class="delete" href="delete.php?a=<?php echo $album; ?>&file=<?php echo $file; ?>">
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#ea4335" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path></svg>
 			</a>
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></br><?php echo formatsize(filesize($file)); ?></span>
-		<?php if(isimg($file)){ // Image files?>
+		<?php if(isimg($file)){ // Image files ?>
 				<img data-original="<?php echo $file; ?>?r=<?php echo $res; ?>" class="lazy" width="300px" height="170px">
-				<noscript><img src="<?php echo $file; ?>?r=<?php echo $res; ?>"></noscript>
 		<?php } else { // Video files?>
 			<?php /* /<video data-src="<?php echo $file; ?>" class="lazy" width="300px" height="170px" controls autobuffer >Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video> */ ?>
-			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="loadvideo.jpg" onclick="var sourceFile = $(this).attr('data-src');$(this).attr('src', sourceFile);$(this).removeAttr('data-src');$(this).load();$(this).removeAttr('poster');" <?php } ?>>
+			<video <?php if(!$ismobile){ echo "data-src"; }else{echo"src";}?>="<?php echo $file; ?>" width="300px" height="170px" class="lazyvid" controls <?php if(!$ismobile){ ?>poster="inc/loadvideo.jpg"<?php } ?>>
 				Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.
 			</video>
-			<noscript><video src="<?php echo $file; ?>" controls>Ihr Browser kann dieses Video nicht wiedergeben.<br>Sie können das Video <a href="<?php echo $file; ?>">hier</a> abrufen.</video></noscript>
 		<?php } ?>
 	</div>
 <?php } ?>
-
 </div>
+
+<div class="gallerynav hidden">
+	<a class="galleryprev"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M16.26 1.3L2.28 23l13.98 21.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
+	<a class="gallerynext"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M1.76 1.3L15.74 23 1.76 44.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
+</div>
+
+<script src="inc/lazyload.min.js"></script>
+<script>new LazyLoad();</script>
 <?php // End-Backups ?>
 <p style="text-align:center;color:#555;padding:5px;font-size:.6rem;">&copy; Copyright <a href="https://adrianjost.hackedit.de" rel="nofollow" style="color:#000";>Adrian Jost</a></p>
 </body></html>

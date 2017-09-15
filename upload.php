@@ -77,7 +77,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	
 	
 	<script src="inc/dropzone.min.js"></script>
-	<form action="inc/dropzoneupload.php?a=<?php echo $album; ?>" class="dropzone hidden" id="dropzone">
+	<form action="dropzoneupload.php?a=<?php echo $album; ?>" class="dropzone hidden" id="dropzone">
 		<div class="dz-message">
 			Drop files here<br>or click to upload.<br>
 			<span>Be carefull, the selected files are automatically uploaded.</span>
@@ -89,7 +89,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	var myDropzone = new Dropzone(
 		"#dropzone", 
 		{ 
-			url: "inc/dropzoneupload.php?a=<?php echo $album; ?>",
+			url: "dropzoneupload.php?a=<?php echo $album; ?>",
 			parallelUploads: 10,
 			maxFilesize: 90,
 			addRemoveLinks:false,
@@ -101,7 +101,7 @@ a:hover{color:<?php echo $color[1]; ?>;}
 	</script>	
 
 	<noscript>	
-		<form method="post" action="fileupload.php?a=<?php echo $album; ?>" class="noscriptform" enctype="multipart/form-data">
+		<form method="post" action="noscriptupload.php?a=<?php echo $album; ?>" class="noscriptform" enctype="multipart/form-data">
 			<input type="file" name="files[]" multiple="multiple" accept=".jpg,.jpeg,.png,.gif,.mp4,.ogg,.webm"/></br>
 			<input type="submit" id="submitimg" value="Upload!" />
 			<label id="Lsubmitimg" for="submitimg">

@@ -27,10 +27,13 @@ nav ul li:hover{background: rgba(255,255,255,.5);}
 #navtoggle{display:none; float:right; padding: .5rem 1rem; font-size:1.5rem; transition: all .3s ease-in-out;}
 nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
 
-.lazy,
-.hidden{display:none;}
 
-body{margin-top: 5rem;}
+.hidden{display:none;}
+/* Lazyload CSS */
+img:not([src]) {width:300px !important;height:170px !important;}/* Prevents img without src to appear */
+@-moz-document url-prefix() {img:-moz-loading {visibility: hidden;}}/* Fixes Firefox anomaly */
+
+body{padding-top: 5rem;}
 
 .box{
 	box-sizing: border-box;
@@ -93,11 +96,11 @@ body{margin-top: 5rem;}
 
 .imgwrap.full{
 	position: fixed;
-    top: 0;
-    left: 0;
+    top: 0;		bottom: 0;
+    left: 0;	right: 0;
     z-index: 200;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     max-width: 100%;
     max-height: 100%;
     background: rgba(0,0,0,.9);
@@ -113,7 +116,8 @@ body{margin-top: 5rem;}
 	font-size:1.5rem;
 	line-height:1.2rem;
 }
-.imgwrap.full img{    
+.imgwrap.full img,
+.imgwrap.full video{    
 	display: block;
     position: absolute;
     top: 50%;
@@ -128,6 +132,34 @@ body{margin-top: 5rem;}
 	max-width: 95%;
 	max-height:95%;
 }
+.imgwrap.full video{ 
+	max-width: 75%;
+	max-height:95%;
+}
+/* Slideshow Navigation */
+a.gallerynext,a.galleryprev{
+	position:fixed;
+	z-index: 999;
+	top:50vh;
+	width:4rem; height:4rem;
+	margin:0; padding:0;
+	border-radius:50%;
+	background-color:transparent;
+	cursor:pointer;
+	-webkit-transition: all .3s ease-in-out;
+		-ms-transition: all .3s ease-in-out;
+			transition: all .3s ease-in-out;
+	-webkit-transform:translateY(-50%);
+		-ms-transform:translateY(-50%);
+			transform:translateY(-50%)
+}
+a.gallerynext{right:1rem;}
+a.galleryprev{left:1rem;}
+.gallerynav svg{position:absolute; display:block;width:2rem;height:2rem;top: 1rem;left: 1rem;}
+.gallerynav:hover a{background-color:rgba(0,0,0,.25)}
+.gallerynav a:hover{background-color:rgba(0,0,0,.5)}
+			
+
 /* mail.php */
 .box.mail{max-width:1000px; text-align:center; padding:0}
 .mail .input{display:inline-block;vertical-align:middle;text-align:left;}
@@ -217,7 +249,7 @@ button.submit:focus:after{width: 100%;z-index: -1;}
 }
 
 /* download.php */
-.main .loading{
+.main div.loading{
 	background-color: #F44336;
 	opacity: 0.75;
 	width: 10px;
