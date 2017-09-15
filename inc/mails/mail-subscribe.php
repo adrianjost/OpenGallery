@@ -66,6 +66,6 @@ $text = '
 			</tr>
 		</tbody>
 	</table>
-</body></html>;
+</body></html>
 ';
 ?>

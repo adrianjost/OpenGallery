@@ -7,7 +7,7 @@ $dbPath = str_replace("/inc","/".$album."/sqlite3.db",__DIR__);
 // Setup ###############################################################
 
 
-function create($handle){			// Datenbank für neuen Ordner erstellen
+function create($handle){			// Datenbank fÃ¼r neuen Ordner erstellen
 	// Gallery : GID (varchar 32) | title (varchar 255) | lastUp (int) | lastZip (int) | items (int) | lastNewsItems (int) | lastNewsTime (int) | size (int)
 	$handle->query(
 		'CREATE TABLE IF NOT EXISTS Gallery(
@@ -123,7 +123,7 @@ function delete_user($userid){
 	query("DELETE From Mail WHERE UID='$userid';");}
 	
 // Newsletter
-function get_users(){			// alle NutzerIDs für Newsletter ausgeben
+function get_users(){			// alle NutzerIDs fÃ¼r Newsletter ausgeben
 	$db = connect();
 	$result = $db->query('SELECT UID FROM Mail WHERE status=1;');
 	$out = array();
@@ -131,9 +131,9 @@ function get_users(){			// alle NutzerIDs für Newsletter ausgeben
 	$db->close();
 	return $out;
 }
-function get_username($userid){	// Name der NutzerID (für Newsletters)
+function get_username($userid){	// Name der NutzerID (fÃ¼r Newsletters)
 	return queryS("SELECT FirstName FROM Mail WHERE UID = '$userid';");}
-function get_usermail($userid){	// E-Mail Adresse der NutzerID (für Newsletters)
+function get_usermail($userid){	// E-Mail Adresse der NutzerID (fÃ¼r Newsletters)
 	return queryS("SELECT email FROM Mail WHERE UID = '$userid';");}
 	
 function get_lastNewsItems(){ // Anzahl der Bilder die es beim letzten Newsletter gab

@@ -29,7 +29,7 @@ include("inc/html/nav.php");
 	<form class="mailOpt" action="mail-handle.php?update" autocomplete="on" method="POST">
 		<input type="text" name="id" hidden style="display:none;" value="<?php echo $id; ?>">
 		<label for="name">Enter your Name so we can write more personal mails to you</label>
-		<input type="text" name="name" placeholder="Adrian Jost" value="<?php echo (get_username($id)=="Follower")?"":(get_username($id));?>">
+		<input type="text" name="name" id="username" placeholder="Peter" value="<?php echo (get_username($id)=="Follower")?"":(get_username($id));?>">
 		</br>
 		<button type="submit" class="submit">Update</button>
 	</form>

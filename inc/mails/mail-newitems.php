@@ -24,7 +24,7 @@ return '
 							<tr>
 								<td align="left" valign="top" style="line-height:150%;font-family:Helvetica;font-size:14px;color:#333333;padding:20px">
 									<h2 style="font-size:22px;line-height:28px;margin:0 0 12px 0">
-										<b>'.$newitems.'</b> new Files on <b>'.$fname.'</b>
+										<b>'.$newitems.'</b> new File'.(($newitems==1)?'':'s').' on <b>'.$fname.'</b>
 									</h2>
 									<div>
 										<p style="padding:0 margin:0;">
@@ -38,7 +38,7 @@ return '
 									<br>
 									<div>
 										<p style="padding:0 0 10px 0">
-											Check your Abo here: <a href="https://gallery.hackedit.de/mail-handle.php?id='.$uid.'" style="color:#336699" target="_blank"">click this link</a>
+											Check your Abo here: <a href="https://gallery.hackedit.de/mail.php?id='.$uid.'" style="color:#336699" target="_blank"">click this link</a>
 										</p>
 										<p style="padding:0 0 10px 0">
 											If you received this email by mistake, simply <a href="https://gallery.hackedit.de/mail-handle.php?delete='.$uid.'" style="color:#336699" target="_blank"">click this link</a> to unsubscribe from our list and delete this mail.
@@ -70,7 +70,7 @@ return '
 			</tr>
 		</tbody>
 	</table>
-</body></html>;
+</body></html>
 ';
 }
 ?>
