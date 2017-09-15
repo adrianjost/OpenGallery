@@ -40,7 +40,10 @@ $color = $colors[ array_rand($colors,1)];
 
 ?>
 <html><head>
+<title>Gallery ~ <?php echo $album; ?></title>
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
 <script defer src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script defer src="jquery.lazyload.min.js?v3"></script>
 <meta name="theme-color" content="<?php echo $color[1]; ?>">

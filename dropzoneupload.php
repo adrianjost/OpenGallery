@@ -36,7 +36,6 @@ function image_fix_orientation($filename) {
             case 6:
                 $image = imagerotate($image, -90, 0);
                 break;
-
             case 8:
                 $image = imagerotate($image, 90, 0);
                 break;

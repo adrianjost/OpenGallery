@@ -2,6 +2,13 @@
 	RewriteEngine On
 	Options +FollowSymlinks 
 	
+# Block Bots
+	RewriteCond %{HTTP_USER_AGENT} ^Googlebot [OR,NC]
+	RewriteCond %{HTTP_USER_AGENT} ^Bingbot [OR,NC]
+	RewriteCond %{HTTP_USER_AGENT} ^(.*)bot$ [OR,NC]
+	RewriteCond %{HTTP_USER_AGENT} ^Slurp [NC]
+	RewriteRule .* - [F]
+	
 # HTTPS
 	RewriteCond %{HTTPS} off
 	RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
@@ -19,11 +26,11 @@ AddCharset UTF-8 .html
 # Adaptive Images
 	RewriteCond %{QUERY_STRING} r=150
 	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/gallery%{REQUEST_URI}.150px -f
-	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/gallery%{REQUEST_URI}.150px [L]
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/gallery%{REQUEST_URI}.150px [NC,L]
 	
 	RewriteCond %{QUERY_STRING} r=300
 	RewriteCond %{DOCUMENT_ROOT}/gallery/thumbs/gallery%{REQUEST_URI}.300px -f
-	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/gallery%{REQUEST_URI}.300px [L]
+	RewriteRule \.(?:jpe?g|gif|png)$ /thumbs/gallery%{REQUEST_URI}.300px [NC,L]
 
 	RewriteCond %{QUERY_STRING} !=""
 	RewriteCond %{REQUEST_URI} !thumbs
