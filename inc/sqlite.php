@@ -72,6 +72,8 @@ function create_gallery($title){
 // SET
 //function set_FolderName(){// Titel des Ordners
 //	return queryS('SELECT title FROM Gallery WHERE GID='.$gid);}	
+function set_FolderName($title){	// Titel des Ordners
+	return query('UPDATE Gallery SET title= '.$title.';'	);}	
 function plus_foldersize($size){	// verbrauchten Speicherplatz ausgeben
 	return query('UPDATE Gallery SET size = size + '.$size.';'		);}
 function set_foldersize($size){	// verbrauchten Speicherplatz ausgeben

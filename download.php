@@ -12,7 +12,7 @@ include("inc/html/head.php");
 <style>
 body:before,
 .main .bt{background-color: <?php echo $color[0]; ?>;}
-.main{ margin: 7.5rem auto 1rem;}
+.main{ margin: 2.5rem auto 1rem;}
 a{color:<?php echo $color[0]; ?>;}
 a:hover{color:<?php echo $color[1]; ?>;}
 .main .bt:hover{ background-color: <?php echo $color[1]; ?>;}
