@@ -244,7 +244,7 @@ button.submit:focus:after{width: 100%;z-index: -1;}
 .cssbutton.help{display:inline; width:1rem; height:1rem;}
 .cssbutton .inner{visibility:hidden; max-width:0; max-height:0; margin:0;overflow:hidden; padding:0;font-size: .8em; border:0px solid transparent; text-align:left; transition: all .3s ease-in-out; transition-delay:1s;}
 .cssbutton:hover .inner{visibility:visible; max-width:100%; width:auto; max-height:10rem; height:auto; padding: .5rem 1rem; margin:1rem 0; border:1px solid #aaa; transition-delay:0s;}
-.fullinput{width:100%; padding:1rem .5rem; margin:1rem 0; font-size: 1.5rem; outline:none; border:3px solid #aaa;}
+.fullinput{width:100%; padding:1rem .5rem; margin:.5rem 0 1rem; font-size: 1.5rem; outline:none; border:3px solid #aaa;}
 .box.authenticate{font-size:1.2rem;}
 
 /* upload.php */

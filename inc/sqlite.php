@@ -65,6 +65,8 @@ function create_gallery($title){
 	//echo "<a href='index.php?a=".$GID."'>".$GID."</a></br>";
 	if(queryS("SELECT GID FROM Gallery;")==NULL){
 		query("INSERT INTO Gallery (GID, title, lastUp, lastZip, items, lastNewsItems, size) VALUES('$GID', '$title', 0, 0, 0, 0, 0);");
+	}else{
+		
 	}
 	return $GID;
 }
@@ -73,7 +75,7 @@ function create_gallery($title){
 //function set_FolderName(){// Titel des Ordners
 //	return queryS('SELECT title FROM Gallery WHERE GID='.$gid);}	
 function set_FolderName($title){	// Titel des Ordners
-	return query('UPDATE Gallery SET title= '.$title.';'	);}	
+	return query('UPDATE Gallery SET title = "'.$title.'";'	);}	
 function plus_foldersize($size){	// verbrauchten Speicherplatz ausgeben
 	return query('UPDATE Gallery SET size = size + '.$size.';'		);}
 function set_foldersize($size){	// verbrauchten Speicherplatz ausgeben
