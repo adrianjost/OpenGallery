@@ -27,105 +27,14 @@ $destination = $album."/".$album."-files";
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
 <title>Gallery ~ <?php echo $album; ?></title>
 <meta name="theme-color" content="<?php echo $color[1]; ?>">
+<link rel="stylesheet" href="style.css?v=23" type="text/css" media="all">
 <style>
-html,body,h1,h2,h3,h4,h5,p,a{margin:0;padding:0; font-family: "Segoe UI", Arial, sans-serif;}
-body{position:relative; -webkit-text-size-adjust: 100%; line-height: initial; background: #eee;}
-body:before{
-	content: "";
-	display:block;
-	z-index: -1;
-    position: fixed;
-    width: 100%;
-    height: 40vh;
-    top: 0;
-    background-color: <?php echo $color[0]; ?>;
-}
-a{color:<?php echo $color[0]; ?>; text-decoration: none; transition: all .3s ease-in-out;}
+body:before,
+.main .bt
+{background-color: <?php echo $color[0]; ?>;}
+a{color:<?php echo $color[0]; ?>;}
 a:hover{color:<?php echo $color[1]; ?>;}
-ul,li{padding:0;margin:0;}
-
-/* Navigationbar */
-nav{position:fixed; top: 0; left:0;z-index:9999;width: 100%;min-height: 3rem;background: rgba(0,0,0,.5);}
-nav a,nav a:hover{color:#fff;}
-nav .title a{float: left;padding: .5rem .5rem 0;font: 400 2rem Sans-Serif;}
-nav .title a svg{display: inline-block;width:1.5rem; height:1.5rem;}
-nav .title a span{text-transform:capitalize; font-size:.8rem; color:rgba(255,255,255,.5);}
-nav .navigation{float: right;}
-nav li{display:inline-block; float:left;text-align:center;}
-nav li a{display:inline-block;padding: 1rem;max-width:200px;}
-nav li a svg{display:inline; height: 1rem; width:auto; }
-nav ul{margin-right:1rem;}
-nav ul li:hover{background: rgba(255,255,255,.5);}
-#navtoggle{display:none; float:right; padding: .5rem 1rem; font-size:1.5rem; transition: all .3s ease-in-out;}
-nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform: rotate(270deg);-ms-transform: rotate(270deg);-o-transform: rotate(270deg);filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);}
-
-.main{
-	box-sizing: border-box;
-	width: 95%;
-	max-width: 800px;
-	text-align: center;
-	background-color: #fff;
-    border-radius: 3px;
-    box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.19), 0 2px 6px 0 rgba(0, 0, 0, 0.2);
-    margin: 7.5rem auto 1rem;
-	padding: 2rem;
-}
-.main .text{max-width:350px;margin:0 auto;}
-.main b{display:inline-block;margin:1rem 0 .5rem;}
-.main .bt{
-	display: table;
-    max-width: 500px;
-	border: none;
-	margin: 1.5rem auto;
-    padding: .75rem;
-	border-radius:5px;
-	font-weight: 700;
-    font-size: 1rem;
-    color: #fff;
-    background-color: <?php echo $color[0]; ?>;
-	transition: all .3s ease-in-out;
-}
 .main .bt:hover{ background-color: <?php echo $color[1]; ?>;}
-.main .bt svg{display: inline-block;width:1rem; height:1rem;}
-.main .info{ display:inline-block; margin:0 3px; font-size: .8rem; color: #999;}
-.main ul{display:inline-block; box-sizing: border-box;text-align:left; margin:0 auto; padding-left:1.5rem;}
-.main img{max-width:100px;}
-
-.main .loading{
-	background-color: #F44336;
-	opacity: 0.75;
-	width: 10px;
-	height: 10px;
-	margin: 2rem auto 2.5rem;
-	border: 5px solid #F44336;
-	animation: boxSpin 1s ease-in-out infinite;
-}
-@keyframes boxSpin{
-  0%{	box-shadow:  10px -10px #2196F3, -10px  10px #FFC107;		}
-  25%{	box-shadow:  10px  10px #2196F3, -10px -10px #FFC107;		}
-  50%{	box-shadow: -10px  10px #2196F3,  10px -10px #FFC107;		}
-  75%{ 	box-shadow: -10px -10px #2196F3,  10px  10px #FFC107;		}
-  100%{	box-shadow:  10px -10px #2196F3, -10px  10px #FFC107;		}
-}
-
-
-@media (max-width: 600px){	
-	nav .navigation{float: left;margin: 0; width:100%;}
-	nav .title a{border-bottom: 1px solid rgba(255,255,255,.5);}
-	nav ul{margin: 0; width:100%;}
-	nav li{min-width: 50%;}
-	nav li a{padding: .75rem 0;}
-	nav #navtoggle{display:block;}
-	nav .navigation li{		max-height: 0;		opacity:0;	transition: all .3s ease-in-out; }
-	nav.open .navigation li{max-height: 4rem; 	opacity:1;}
-	nav .navigation li a{ 		font-size: 0;		transition: all .3s ease-in-out;}
-	nav.open .navigation li a{	font-size: 1rem;}
-	
-	.main{width: 90%; padding:1rem;}
-}
-@media(max-height:300px) {
-	nav li{min-width: 25%;}
-}
 </style>
 </head><body id="body">
 
@@ -140,9 +49,6 @@ nav.open #navtoggle{color: #aaa;-webkit-transform: rotate(270deg);-moz-transform
 	<div id="navtoggle" class="navtoggle"><a href="javascript:document.getElementById('navigation').classList.toggle('open');">&#9776;</a></div>
 	<div id="sitenavigation" class="navigation">
 		<ul>
-			<li><a href="/?a=<?php echo $album; ?>">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 1800"><path d="M932.14 845.75q0-14.05-9.04-23.1-9.04-9.03-23.1-9.03-66.3 0-113.5 47.2-47.2 47.17-47.2 113.43 0 14.05 9.03 23.1 9.04 9.02 23.1 9.02 14.06 0 23.1-9.03 9.04-9.04 9.04-23.1 0-40.15 28.13-68.26 28.12-28.1 68.3-28.1 14.06 0 23.1-9.04 9.04-9.04 9.04-23.1zm225 130.5q0 106.42-75.33 181.7-75.32 75.3-181.8 75.3-106.46 0-181.8-75.3-75.33-75.28-75.33-181.7 0-106.4 75.33-181.7 75.33-75.3 181.8-75.3 106.47 0 181.8 75.3 75.34 75.3 75.34 181.7zM128.57 1552.5h1542.86V1424H128.57v128.5zM1285.7 976.26q0-159.62-113-272.56T900 590.76q-159.7 0-272.7 112.94t-113 272.56q0 159.62 113 272.56T900 1361.76q159.7 0 272.7-112.94t113-272.56zM257.15 331.76h385.72v-128.5H257.14v128.5zM128.57 524.5h1542.86v-257h-831.7L775.45 396H128.57v128.5zM1800 267.5v1285q0 53.2-37.67 90.85-37.66 37.65-90.9 37.65H128.57q-53.24 0-90.9-37.65Q0 1605.7 0 1552.5v-1285q0-53.2 37.67-90.85Q75.33 139 128.57 139h1542.86q53.24 0 90.9 37.65Q1800 214.3 1800 267.5z" fill="#fff"/></svg>
-				Home</a></li>
 			<li><a href="upload.php?a=<?php echo $album; ?>">
 				<svg viewBox="0.328 0 512 526.05"><g fill="#fff"><path d="M482.84 308.1c-16.28 0-29.48 13.2-29.48 29.5v129.48H59.3v-129.5c0-16.28-13.2-29.48-29.48-29.48-16.3 0-29.5 13.2-29.5 29.5v158.96c0 16.3 13.2 29.5 29.5 29.5h453.02c16.3 0 29.5-13.2 29.5-29.5V337.6c0-16.3-13.2-29.5-29.5-29.5z"></path><path d="M235.47 8.65C241.01 3.11 248.51 0 256.33 0s15.3 3.1 20.84 8.64l118.9 118.9c11.52 11.5 11.52 30.1 0 41.6-11.5 11.52-30.18 11.52-41.7 0l-68.57-68.5v253.13c0 16.28-13.2 29.48-29.45 29.48-16.3 0-29.5-13.2-29.5-29.5V100.67l-68.54 68.56c-11.5 11.52-30.2 11.5-41.7 0-11.5-11.5-11.5-30.18 0-41.7l118.9-118.9z"></path></g></svg>
 				Upload</a></li>
