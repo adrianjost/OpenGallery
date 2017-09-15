@@ -1,4 +1,5 @@
 <html><head>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 html,body,h1,h2,h3,h4,h5,p,a{margin:0;padding:0; font-family: "Segoe UI", Arial;}
@@ -29,7 +30,7 @@ ul,li{list-style: none;padding-left: .5rem;margin:0;}
 	vertical-align: middle;
 }
 .imgwrap img{
-	width: 100%;
+	max-width: 100%;
 	height: auto;
 }
 .imgwrap .delete{
@@ -70,6 +71,9 @@ svg{
     height: 1.2rem;
 }
 
+.lazy {
+    display: none;
+}
 .delete{float:right;}
 .delete svg{width:1.25rem; height:1.25rem;}
 .delete:hover svg path{fill:#900;}
@@ -116,7 +120,8 @@ foreach ($myarray as $file) {
 		<?php } ?>
 		<span class="filename"><?php echo str_replace($_GET['a']."/","", $file); ?></span>
 		<a href="<?php echo $file; ?>?r=l">
-			<img src="<?php echo $file; ?>?r=300">
+			<img data-original="<?php echo $file; ?>?r=300&q=80" class="lazy" width="300px" height="170px">
+			<noscript><img src="<?php echo $file; ?>?r=300&q=80"></noscript>
 		</a>
 	</div>
 <?php } ?>
@@ -126,4 +131,15 @@ foreach ($myarray as $file) {
 </div>
 <?php // End-Backups ?>
 <p style="text-align:center;color:#fff;padding:5px;font-size:.6rem;">&copy; Copyright Adrian Jost</p>
+
+
+<script>//function init(){var imgDefer=document.getElementsByTagName('img');for(var i=0;i<imgDefer.length;i++){if(imgDefer[i].getAttribute('data-src')){imgDefer[i].setAttribute('src',imgDefer[i].getAttribute('data-src'));}}}window.onload=init;</script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="jquery.lazyload.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+	$("img.lazy").show().lazyload({
+		effect : "fadeIn"
+    });
+  </script>
 </body></html>

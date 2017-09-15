@@ -29,6 +29,6 @@ $fp = fopen($_GET['a']."/lastup.txt", 'w');
 fwrite($fp, time());
 fclose($fp);
 
-//header("Location: index.php?a=".$_GET['a']);
+header("Location: index.php?a=".$_GET['a']);
 exit();
 ?>

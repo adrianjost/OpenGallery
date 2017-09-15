@@ -14,15 +14,31 @@ ignore_user_abort(true);
 $source = __DIR__."/".$_GET['a'];
 $destination = $_GET['a']."/".$_GET['a']."-files.zip";
 
-if(filetime($_GET['a']."/lastup.txt") > filetime($destination)){
+if(filemtime($_GET['a']."/lastup.txt") > filemtime($destination)){
+	//echo "regenerate...";
 	// delete old zip
 	if (is_file($destination)){unlink($destination);}
 	// Start the zipping!
 	zipData($source, $destination);
 }
 //updatelist($destination);
-header("Location: ".$_GET['a']."/".$_GET['a']."-files.zip");
-echo 'Finished. <script>window.close()</script>';
+
+$file_name = $_GET['a']."/".$_GET['a']."-files.zip";
+header('Pragma: public'); 	// required
+header('Expires: 0');		// no cache
+header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+header('Last-Modified: '.gmdate ('D, d M Y H:i:s', filemtime ($file_name)).' GMT');
+header('Cache-Control: private',false);
+header('Content-Type: '.$mime);
+header('Content-Disposition: attachment; filename="'.basename($file_name).'"');
+header('Content-Transfer-Encoding: binary');
+header('Content-Length: '.filesize($file_name));	// provide file size
+header('Connection: close');
+readfile($file_name);		// push it out
+exit();
+
+//header("Location: ".$_GET['a']."/".$_GET['a']."-files.zip");
+//echo 'Finished. <script>window.close()</script>';
 
 function startsWith($haystack, $needle) {
     // search backwards starting from haystack length characters from the end
