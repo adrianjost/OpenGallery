@@ -101,9 +101,10 @@ if($count==0){?>
 <?php } ?>
 </div>
 
-<div id="gallerynav" class="gallerynav hidden">
+<div id="fullscreen" class="hidden">
 	<a class="galleryprev" id="galleryprev" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M16.26 1.3L2.28 23l13.98 21.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
 	<a class="gallerynext" id="gallerynext" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M1.76 1.3L15.74 23 1.76 44.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
+    <div id="content"></div>
 </div>
 
 <script src="inc/js/lazyload.min.js"></script>
