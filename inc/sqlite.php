@@ -3,8 +3,8 @@
 $dbPath = str_replace("/inc","/".$album."/sqlite3.db",__DIR__);
 // Setup ###############################################################
 
-function RandomIDGenerator($len = 8) {
-    $base='abcdefghjkmnpqrstwxyzABCDEFGHKLMNOPQRSTWXYZ';
+function RandomIDGenerator($len = 5) {
+    $base='abcdefghjkmnpqrstwxyzABCDEFGHKLMNOPQRSTWXYZ0123456789';
     $activatecode='';
     mt_srand((double)microtime()*1000000);
     while (strlen($activatecode)<$len)
