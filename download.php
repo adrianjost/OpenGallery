@@ -116,7 +116,7 @@ function zipData($source, $destination) {
 					nextpage();
 					return;
 				}
-				$zip->addFile($file, basename($file));
+				$zip->addFile($file, substr(basename($file),11));
 				$itemnr = $itemnr + 1;
 				$sumsize = $sumsize + filesize($file);
 			}
