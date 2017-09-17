@@ -102,9 +102,9 @@ if($count==0){?>
 </div>
 
 <div id="fullscreen" class="hidden">
-	<a class="galleryprev" id="galleryprev" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M16.26 1.3L2.28 23l13.98 21.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
-	<a class="gallerynext" id="gallerynext" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" width="18" height="46" viewBox="0 0 18 46"><path d="M1.76 1.3L15.74 23 1.76 44.7" opacity=".6" fill="none" stroke="#fff" stroke-width="2.98"/></svg></span></a>
+	<a class="galleryprev gallerynav" id="galleryprev" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 45"><path fill="none" stroke="#000" stroke-width="2.979" d="M15.748.806L1.772 22.5l13.976 21.693" opacity=".6"/></svg></span></a>
     <div id="content"></div>
+	<a class="gallerynext gallerynav" id="gallerynext" tabindex="0"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 45"><path fill="none" stroke="#000" stroke-width="2.979" d="M1.252.806L15.228 22.5 1.252 44.193" opacity=".6"/></svg></span></a>
 </div>
 
 <script src="inc/js/lazyload.min.js"></script>

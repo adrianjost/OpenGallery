@@ -40,8 +40,8 @@ li.share:hover .noti { right:0; transition-delay:0s;}
 .hidden{display:none;}
 /* Lazyload CSS */
 img:not(.loaded),
-img:not([src]) {width:300px !important; height:170px !important;}/* Prevents img without src to appear */
-img{
+img:not([src]) {width:300px !important; height:170px !important;}/* Prevents img without src to disappear */
+img:not(.loaded){
 	background: url("../media/loading.gif") no-repeat center;
 	background: url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2230%22%20viewBox%3D%220%200%2024%2030%22%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%228%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%2216%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3C/svg%3E) no-repeat center; background-size: 20%;}
 @-moz-document url-prefix() {img:-moz-loading {visibility: hidden;}}/* Fixes Firefox anomaly */
@@ -104,8 +104,8 @@ body{padding-top: 5rem;}
 .imgwrap video{max-height:169px;max-width:300px;	cursor: zoom-in;}
 .imgwrap img{  max-width: 100%; height: auto;		cursor: zoom-in;}
 .imgwrap span{color:#fff;}
-.imgwrap .delete  {display:none;position:absolute;   top: 10px;right: 10px;z-index: 9999;}
-.imgwrap .download{display:none;position:absolute;bottom: 10px; left: 10px;z-index: 9999;}
+.imgwrap .delete  {display:none;position:absolute;   top: 10px;right: 10px;z-index: 100;}
+.imgwrap .download{display:none;position:absolute;bottom: 10px; left: 10px;z-index: 100;}
 .imgwrap .delete svg,
 .imgwrap .download svg{width: 0; height: 0;opacity: .9;}
 .imgwrap:hover .delete svg,
@@ -125,76 +125,50 @@ body{padding-top: 5rem;}
     background: rgba(0,0,0,.95);
     margin: 0;
 }
-/*
-a.gallerynext,a.galleryprev{
-	position:fixed;
-	z-index: 999;
-	top:50vh;
-	width:4rem; height:4rem;
-	margin:0; padding:0;
-	border-radius:50%;
-	background-color:transparent;
-	cursor:pointer;
-	-webkit-transition: all .3s ease-in-out;
-		-ms-transition: all .3s ease-in-out;
-			transition: all .3s ease-in-out;
-	-webkit-transform:translateY(-50%);
-		-ms-transform:translateY(-50%);
-			transform:translateY(-50%)
-}
-a.gallerynext{right:1rem;}
-a.galleryprev{left:1rem;}
-.gallerynav svg{position:absolute; display:block;width:2rem;height:2rem;top: 1rem;left: 1rem;}
-.gallerynav:hover a{background-color:rgba(0,0,0,.25)}
-.gallerynav a:hover{background-color:rgba(0,0,0,.5)}
-
-
-.imgwrap.full{
-	position: fixed;
-    top: 0;		bottom: 0;
-    left: 0;	right: 0;
-    z-index: 200;
+#content{
+    position: relative;
     width: 100vw;
     height: 100vh;
-    max-width: 100%;
-    max-height: 100%;
-    background: rgba(0,0,0,.95) url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2230%22%20viewBox%3D%220%200%2024%2030%22%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%228%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%2216%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3C/svg%3E) no-repeat center; background-size: 20%;
-    margin: 0;
+    background: rgba(0,0,0,.95) url(data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2224%22%20height%3D%2230%22%20viewBox%3D%220%200%2024%2030%22%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%228%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.15s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3Crect%20width%3D%224%22%20height%3D%2210%22%20x%3D%2216%22%20y%3D%2210%22%20fill%3D%22%23333%22%20opacity%3D%22.2%22%3E%3Canimate%20attributeName%3D%22opacity%22%20attributeType%3D%22XML%22%20values%3D%220.2%3B%201%3B%20.2%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22height%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%2020%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3Canimate%20attributeName%3D%22y%22%20attributeType%3D%22XML%22%20values%3D%2210%3B%205%3B%2010%22%20begin%3D%220.3s%22%20dur%3D%221.5s%22%20repeatCount%3D%22indefinite%22/%3E%3C/rect%3E%3C/svg%3E) no-repeat center; 
+    background-size: 20%;
 }
-.imgwrap.full:before{
-	content:"✕";
-	color:#fff;
-	position: absolute;
-	top:0; right:0;
-	z-index:201;
-	padding:5px;
-	font-size:1.5rem;
-	line-height:1.2rem;
-}
-.imgwrap.full img,
-.imgwrap.full video{    
-	display: block;
+#content img,
+#content video{
     position: absolute;
-    top: 50%;
-    left: 50%;
-    -webkit-transform: translate(-50%, -50%);
-	   -moz-transform: translate(-50%, -50%);
-		-ms-transform: translate(-50, -50);
-		 -o-transform: translate(-50, -50);
-			transform: translate(-50, -50);
-	width:auto;
-	height: auto;
-	max-width: 95%;
-	max-height:95%;
-	outline:none;
-	cursor: zoom-out;
-	background:none;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+
+    max-width: 100vw;
+    max-height: 100vh;
 }
-.imgwrap.full video{ 
-	max-width: 75%;
-	max-height:95%;
+.gallerynav{
+    position: absolute;
+    top: calc(50% - 2.25rem);
+    z-index: 300;
 }
-*/		
+.galleryprev{left:0;}
+.gallerynext{right:0;}
+.gallerynav span{
+    background: rgba(255,255,255,0.9);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    margin: .5rem;
+    padding: .75rem;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s;
+}
+.gallerynav svg{
+    height: 100%;
+}
+.gallerynav:hover span{
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: .75rem;
+    margin: .25rem;
+}
 
 /* mail.php */
 .box.mail{max-width:1000px; text-align:center; padding:0}
