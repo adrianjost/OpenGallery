@@ -1,3 +1,6 @@
+![https://img.shields.io/badge/version-3.12-green.svg](https://img.shields.io/badge/version-3.12-green.svg)
+[![Project Status: Unsupported – The project has reached a stable, usable state but the author(s) have ceased all work on it. A new maintainer may be desired.](https://www.repostatus.org/badges/latest/unsupported.svg)](https://www.repostatus.org/#unsupported)
+
 # OpenGallery
 OpenGallery is an easy way to share photos and small videos with your friends and colleagues without loosing meta-data or image-quality of these.
 
